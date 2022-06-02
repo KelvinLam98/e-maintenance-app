@@ -20,7 +20,7 @@ import {
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const MainPage = () => {
+const MainPage = ({navigation}) => {
   return (
     <>
       <View>
@@ -36,7 +36,7 @@ const MainPage = () => {
             name="person"
             size={30}
             color="black"
-            onPress={() => console.log('Button press')}
+            onPress={() => navigation.navigate('Login')}
           />
         </Text>
       </View>
