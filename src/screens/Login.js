@@ -11,25 +11,43 @@ import {
   Button,
   Image,
   TextInput,
+  Alert,
 } from 'react-native';
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import {post} from '../common/ServerApi';
 
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [init, setInit] = useState(false);
+
+  useEffect(() => {
+    setInit(true);
+  }, [init]);
+
+  // eslint-disable-next-line no-shadow
+  async function getLoginRequest(email, password) {
+    try {
+      const response = await post('api/login', {
+        loginEmail: email,
+        loginPassword: password,
+      });
+      if (response.loginIsAuthenticated === true) {
+        navigation.navigate('MainPage');
+      } else {
+        Alert.alert('Cannot login');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <>
       <ScrollView>
         <View>
-          <Text style={styles.backBtn}>
-            <TouchableOpacity onPress={() => console.log('button pressed')}>
-              <Ionicons name="arrow-back-outline" size={25} color="black" />
-            </TouchableOpacity>
-          </Text>
-        </View>
-        <View>
           <Image
+            // eslint-disable-next-line react-native/no-inline-styles
             style={{
               width: 100,
               height: 100,
@@ -59,7 +77,10 @@ const Login = ({navigation}) => {
             value={password}
             onChangeText={newValue => setPassword(newValue)}
           />
-          <Button title="Submit" />
+          <Button
+            title="Submit"
+            onPress={newValue => getLoginRequest(email, password)}
+          />
         </View>
       </ScrollView>
     </>
