@@ -1,12 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import type {Node} from 'react';
 import {
-  SafeAreaView,
-  TouchableOpacity,
   StyleSheet,
   Text,
   View,
-  TouchableHighlight,
   ScrollView,
   Button,
   Image,
@@ -49,6 +46,7 @@ const Login = ({navigation}) => {
           <Image
             // eslint-disable-next-line react-native/no-inline-styles
             style={{
+              margin: 30,
               width: 100,
               height: 100,
               resizeMode: 'contain',

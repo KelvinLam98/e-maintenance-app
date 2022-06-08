@@ -6,9 +6,8 @@
  * @flow strict-local
  */
 
-import React from 'react';
-import type {Node} from 'react';
-//import { get } from './common/ServerApi';
+import React, {useEffect, useState} from 'react';
+//import type {Node} from 'react';
 import {
   SafeAreaView,
   TouchableOpacity,
@@ -16,17 +15,40 @@ import {
   Text,
   View,
   Image,
+  FlatList,
+  Table,
+  ScrollView,
 } from 'react-native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {get, post, resource} from './common/ServerApi';
+import {NativeBaseProvider, SectionList} from 'native-base';
 
 const MainPage = ({navigation}) => {
+  const [init, setInit] = useState(false);
+  const [workOrder, setWorkOrder] = useState([]);
+  async function getWorkOrder() {
+    try {
+      const response = await get('api/workOrder');
+      console.log('debug1===', response);
+      const json = await response;
+      setWorkOrder(json.data);
+      console.log('debug2===', json.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  useEffect(() => {
+    setInit(true);
+  }, [init]);
+
   return (
     <>
       <View>
         <Text style={styles.head}>
           <Image
             source={require('./logo2.png')}
+            // eslint-disable-next-line react-native/no-inline-styles
             style={{width: 40, height: 40}}
           />
           {'  '}E-Maintenance App
@@ -40,19 +62,29 @@ const MainPage = ({navigation}) => {
           />
         </Text>
       </View>
-      <SafeAreaView backgroundColor="white">
-        <View style={styles.nav}>
-          <TouchableOpacity style={styles.button}>
-            <Text>Home</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
-            <Text>Maintenance</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
-            <Text>Profile</Text>
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
+
+      <View style={styles.nav}>
+        <TouchableOpacity style={styles.button} onPress={() => getWorkOrder()}>
+          <Text>Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text>Maintenance</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text>Profile</Text>
+        </TouchableOpacity>
+      </View>
+      {workOrder.map(item => (
+        <Table>
+          <tbody>
+            <td>{item.id}</td>
+            <td>{item.maintenanceDate}</td>
+            <td>{item.maintenanceName}</td>
+            <td>{item.status}</td>
+            <td>{item.person_in_charge}</td>
+          </tbody>
+        </Table>
+      ))}
     </>
   );
 };
