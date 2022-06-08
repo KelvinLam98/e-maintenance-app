@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
@@ -22,7 +23,8 @@ import {
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {get, post, resource} from './common/ServerApi';
-import {NativeBaseProvider, SectionList} from 'native-base';
+import {DataTable} from 'react-native-paper';
+import Moment from 'moment';
 
 const MainPage = ({navigation}) => {
   const [init, setInit] = useState(false);
@@ -40,6 +42,7 @@ const MainPage = ({navigation}) => {
   }
   useEffect(() => {
     setInit(true);
+    getWorkOrder();
   }, [init]);
 
   return (
@@ -74,17 +77,28 @@ const MainPage = ({navigation}) => {
           <Text>Profile</Text>
         </TouchableOpacity>
       </View>
-      {workOrder.map(item => (
-        <Table>
-          <tbody>
-            <td>{item.id}</td>
-            <td>{item.maintenanceDate}</td>
-            <td>{item.maintenanceName}</td>
-            <td>{item.status}</td>
-            <td>{item.person_in_charge}</td>
-          </tbody>
-        </Table>
-      ))}
+      <ScrollView>
+        <DataTable>
+          <DataTable.Header style={styles.header}>
+            <DataTable.Title date style={styles.cell1}>
+              Date
+            </DataTable.Title>
+            <DataTable.Title style={styles.cell2}>
+              Maintenance Name
+            </DataTable.Title>
+            <DataTable.Title style={styles.cell3}>Status</DataTable.Title>
+          </DataTable.Header>
+          {workOrder.map(item => (
+            <DataTable.Row>
+              <DataTable.Cell>
+                {Moment(item.maintenance_date).format('LL')}
+              </DataTable.Cell>
+              <DataTable.Cell>{item.maintenance_name}</DataTable.Cell>
+              <DataTable.Cell>{item.status}</DataTable.Cell>
+            </DataTable.Row>
+          ))}
+        </DataTable>
+      </ScrollView>
     </>
   );
 };
@@ -104,6 +118,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingVertical: 10,
     paddingHorizontal: 12,
+  },
+  header: {
+    flexDirection: 'row',
+    width: '100%',
   },
   head: {
     fontSize: 25,
