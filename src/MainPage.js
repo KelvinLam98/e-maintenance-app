@@ -29,6 +29,7 @@ import Moment from 'moment';
 const MainPage = ({navigation}) => {
   const [init, setInit] = useState(false);
   const [workOrder, setWorkOrder] = useState([]);
+  const [page, setPage] = React.useState<number>(1);
   async function getWorkOrder() {
     try {
       const response = await get('api/workOrder');
@@ -77,25 +78,29 @@ const MainPage = ({navigation}) => {
           <Text>Profile</Text>
         </TouchableOpacity>
       </View>
-      <ScrollView>
+      <ScrollView style={styles.container}>
         <DataTable>
           <DataTable.Header style={styles.header}>
-            <DataTable.Title date style={styles.cell1}>
-              Date
-            </DataTable.Title>
-            <DataTable.Title style={styles.cell2}>
+            <DataTable.Title style={{flex: 2}}>Date</DataTable.Title>
+            <DataTable.Title style={{flex: 2}}>
               Maintenance Name
             </DataTable.Title>
-            <DataTable.Title style={styles.cell3}>Status</DataTable.Title>
+            <DataTable.Title>Status</DataTable.Title>
           </DataTable.Header>
           {workOrder.map(item => (
-            <DataTable.Row>
-              <DataTable.Cell>
-                {Moment(item.maintenance_date).format('LL')}
-              </DataTable.Cell>
-              <DataTable.Cell>{item.maintenance_name}</DataTable.Cell>
-              <DataTable.Cell>{item.status}</DataTable.Cell>
-            </DataTable.Row>
+            <>
+              <DataTable.Row
+                style={styles.header}
+                onPress={() => console.log('pressed row')}>
+                <DataTable.Cell style={{flex: 2}}>
+                  {Moment(item.maintenance_date).format('LL')}
+                </DataTable.Cell>
+                <DataTable.Cell style={{flex: 2}}>
+                  {item.maintenance_name}
+                </DataTable.Cell>
+                <DataTable.Cell>{item.status}</DataTable.Cell>
+              </DataTable.Row>
+            </>
           ))}
         </DataTable>
       </ScrollView>
@@ -119,9 +124,20 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 12,
   },
+  container: {
+    flex: 1,
+    paddingTop: 30,
+    paddingHorizontal: 30,
+    backgroundColor: 'lightgrey',
+  },
   header: {
     flexDirection: 'row',
     width: '100%',
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
+    fontSize: 10,
+    color: 'black',
+    textAlign: 'left',
   },
   head: {
     fontSize: 25,
