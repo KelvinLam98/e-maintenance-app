@@ -68,13 +68,17 @@ const MainPage = ({navigation}) => {
       </View>
 
       <View style={styles.nav}>
-        <TouchableOpacity style={styles.button} onPress={() => getWorkOrder()}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('MainPage')}>
           <Text>Home</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}>
           <Text>Maintenance</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('Profile')}>
           <Text>Profile</Text>
         </TouchableOpacity>
       </View>
