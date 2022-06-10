@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 /**
  * Sample React Native App
@@ -19,32 +20,41 @@ import {
   FlatList,
   Table,
   ScrollView,
+  Alert,
 } from 'react-native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {get, post, resource} from '../common/ServerApi';
-import {DataTable} from 'react-native-paper';
+import {DataTable, Searchbar} from 'react-native-paper';
 import Moment from 'moment';
 
 const WorkOrderHistory = ({navigation}) => {
   const [init, setInit] = useState(false);
   const [workOrder, setWorkOrder] = useState([]);
-  const [page, setPage] = React.useState<number>(1);
+  const [searchQuery, setSearchQuery] = React.useState('');
+
+  const onChangeSearch = query => setSearchQuery(query);
+
   async function getWorkOrder() {
+    let url;
+    if (searchQuery.length !== 0) {
+      url = `api/workOrderHistory?searchText=${searchQuery}`;
+    } else {
+      url = 'api/workOrderHistory';
+    }
     try {
-      const response = await get('api/workOrderHistory');
-      console.log('debug1===', response);
+      const response = await get(url);
       const json = await response;
       setWorkOrder(json.data);
     } catch (error) {
-      console.error(error);
+      Alert.alert('error');
     }
   }
 
   useEffect(() => {
-    setInit(true);
     getWorkOrder();
-  }, [init]);
+    setInit(true);
+  }, [init, searchQuery]);
 
   return (
     <>
@@ -85,6 +95,12 @@ const WorkOrderHistory = ({navigation}) => {
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.container}>
+        <Text style={styles.head}>Work Order: TODO</Text>
+        <Searchbar
+          placeholder="Search"
+          onChangeText={onChangeSearch}
+          value={searchQuery}
+        />
         <DataTable>
           <DataTable.Header style={styles.table}>
             <DataTable.Title style={{flex: 2}}>
