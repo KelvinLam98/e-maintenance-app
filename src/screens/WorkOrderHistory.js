@@ -26,13 +26,24 @@ import {get, post, resource} from '../common/ServerApi';
 import {DataTable} from 'react-native-paper';
 import Moment from 'moment';
 
-const Profile = ({navigation}) => {
+const WorkOrderHistory = ({navigation}) => {
   const [init, setInit] = useState(false);
   const [workOrder, setWorkOrder] = useState([]);
   const [page, setPage] = React.useState<number>(1);
+  async function getWorkOrder() {
+    try {
+      const response = await get('api/workOrderHistory');
+      console.log('debug1===', response);
+      const json = await response;
+      setWorkOrder(json.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   useEffect(() => {
     setInit(true);
+    getWorkOrder();
   }, [init]);
 
   return (
@@ -73,7 +84,36 @@ const Profile = ({navigation}) => {
           <Text>Profile</Text>
         </TouchableOpacity>
       </View>
-      <Text>WorkOrderHistory Page</Text>
+      <ScrollView style={styles.container}>
+        <DataTable>
+          <DataTable.Header style={styles.table}>
+            <DataTable.Title style={{flex: 2}}>
+              <Text style={styles.title}>Date</Text>
+            </DataTable.Title>
+            <DataTable.Title style={{flex: 2}}>
+              <Text style={styles.title}>Code</Text>
+            </DataTable.Title>
+            <DataTable.Title>
+              <Text style={styles.title}>Status</Text>
+            </DataTable.Title>
+          </DataTable.Header>
+          {workOrder.map(item => (
+            <>
+              <DataTable.Row
+                style={styles.table}
+                onPress={() => console.log('pressed row')}>
+                <DataTable.Cell style={{flex: 2}}>
+                  {Moment(item.maintenance_date).add(1, 'day').format('L')}
+                </DataTable.Cell>
+                <DataTable.Cell style={{flex: 2}}>
+                  {item.item_code}
+                </DataTable.Cell>
+                <DataTable.Cell>{item.status}</DataTable.Cell>
+              </DataTable.Row>
+            </>
+          ))}
+        </DataTable>
+      </ScrollView>
     </>
   );
 };
@@ -100,13 +140,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     backgroundColor: 'lightgrey',
   },
-  header: {
+  table: {
     flexDirection: 'row',
     width: '100%',
     borderBottomColor: 'black',
     borderBottomWidth: 1,
-    fontSize: 10,
-    color: 'black',
     textAlign: 'left',
   },
   head: {
@@ -117,6 +155,10 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     marginTop: -10,
   },
+  title: {
+    fontSize: 18,
+    color: 'black',
+  },
   buttonIcon: {
     position: 'absolute',
     right: 5,
@@ -126,4 +168,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Profile;
+export default WorkOrderHistory;
