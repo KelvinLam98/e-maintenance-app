@@ -29,14 +29,12 @@ import Moment from 'moment';
 const MainPage = ({navigation}) => {
   const [init, setInit] = useState(false);
   const [workOrder, setWorkOrder] = useState([]);
-  const [page, setPage] = React.useState<number>(1);
   async function getWorkOrder() {
     try {
       const response = await get('api/workOrder');
       console.log('debug1===', response);
       const json = await response;
       setWorkOrder(json.data);
-      console.log('debug2===', json.data);
     } catch (error) {
       console.error(error);
     }
@@ -71,10 +69,12 @@ const MainPage = ({navigation}) => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('MainPage')}>
-          <Text>Home</Text>
+          <Text>Work Order</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text>Maintenance</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('WorkOrderHistory')}>
+          <Text>History</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
@@ -84,23 +84,27 @@ const MainPage = ({navigation}) => {
       </View>
       <ScrollView style={styles.container}>
         <DataTable>
-          <DataTable.Header style={styles.header}>
-            <DataTable.Title style={{flex: 2}}>Date</DataTable.Title>
+          <DataTable.Header style={styles.table}>
             <DataTable.Title style={{flex: 2}}>
-              Maintenance Name
+              <Text style={styles.title}>Date</Text>
             </DataTable.Title>
-            <DataTable.Title>Status</DataTable.Title>
+            <DataTable.Title style={{flex: 2}}>
+              <Text style={styles.title}>Code</Text>
+            </DataTable.Title>
+            <DataTable.Title>
+              <Text style={styles.title}>Status</Text>
+            </DataTable.Title>
           </DataTable.Header>
           {workOrder.map(item => (
             <>
               <DataTable.Row
-                style={styles.header}
+                style={styles.table}
                 onPress={() => console.log('pressed row')}>
                 <DataTable.Cell style={{flex: 2}}>
-                  {Moment(item.maintenance_date).format('LL')}
+                  {Moment(item.maintenance_date).add(1, 'day').format('L')}
                 </DataTable.Cell>
                 <DataTable.Cell style={{flex: 2}}>
-                  {item.maintenance_name}
+                  {item.item_code}
                 </DataTable.Cell>
                 <DataTable.Cell>{item.status}</DataTable.Cell>
               </DataTable.Row>
@@ -134,13 +138,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     backgroundColor: 'lightgrey',
   },
-  header: {
+  table: {
     flexDirection: 'row',
     width: '100%',
     borderBottomColor: 'black',
     borderBottomWidth: 1,
-    fontSize: 10,
-    color: 'black',
     textAlign: 'left',
   },
   head: {
@@ -150,6 +152,10 @@ const styles = StyleSheet.create({
     padding: 5,
     paddingBottom: 10,
     marginTop: -10,
+  },
+  title: {
+    fontSize: 18,
+    color: 'black',
   },
   buttonIcon: {
     position: 'absolute',

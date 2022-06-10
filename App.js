@@ -8,7 +8,6 @@
 
 import React from 'react';
 import {connect} from 'react-redux';
-import type {Node} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import MainPage from './src/MainPage';
