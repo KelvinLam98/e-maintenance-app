@@ -13,6 +13,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import MainPage from './src/MainPage';
 import Login from './src/screens/Login';
+import Profile from './src/screens/Profile';
+import WorkOrderHistory from './src/screens/WorkOrderHistory';
 
 const Stack = createStackNavigator();
 
@@ -24,6 +26,8 @@ const App = () => {
         initialRouteName="MainPage">
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="MainPage" component={MainPage} />
+        <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="WorkOrderHistory" component={WorkOrderHistory} />
       </Stack.Navigator>
     </NavigationContainer>
   );
