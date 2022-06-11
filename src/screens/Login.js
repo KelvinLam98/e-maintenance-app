@@ -11,8 +11,14 @@ import {
 } from 'react-native';
 
 import {post} from '../common/ServerApi';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {withTranslation} from 'react-i18next';
+import {setUserInfo} from '../redux/actions';
+import stores from '../redux/stores';
 
-const Login = ({navigation}) => {
+const Login = props => {
+  const {navigation, onSetUserInfo} = props;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [init, setInit] = useState(false);
@@ -29,6 +35,10 @@ const Login = ({navigation}) => {
         loginPassword: password,
       });
       if (response.loginIsAuthenticated === true) {
+        console.log('initial state: ', stores.getState().app);
+        const state = stores.getState().app;
+        onSetUserInfo();
+        console.log('login success state: ', state.id);
         navigation.navigate('MainPage');
       } else {
         Alert.alert('Cannot login');
@@ -104,4 +114,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+Login.propTypes = {
+  navigation: PropTypes.object,
+  onSetUserInfo: PropTypes.func,
+};
+
+const mapDispatchToProps = dispatch => ({
+  onSetUserInfo: () => dispatch(setUserInfo()),
+});
+
+export default connect(null, mapDispatchToProps)(withTranslation()(Login));

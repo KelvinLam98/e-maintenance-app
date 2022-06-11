@@ -1,5 +1,5 @@
 const protocol = 'http';
-const serverHost = '192.168.0.141:9000';
+const serverHost = '192.168.0.151:9000';
 //const wsClient = new W3CWebSocket(`ws://${serverHost}/web-socket`);
 
 async function get(path, passedInToken) {

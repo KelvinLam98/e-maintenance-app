@@ -47,7 +47,7 @@ const MainPage = ({navigation}) => {
       const json = await response;
       setWorkOrder(json.data);
     } catch (error) {
-      Alert.alert('error');
+      console.log(error);
     }
   }
 
