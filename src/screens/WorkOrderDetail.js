@@ -20,57 +20,43 @@ import {
   FlatList,
   Table,
   ScrollView,
-  Alert,
 } from 'react-native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {get, post, resource} from '../common/ServerApi';
-import {DataTable, Searchbar} from 'react-native-paper';
+import {DataTable} from 'react-native-paper';
 import Moment from 'moment';
 import {setUserInfo, setWorkOrderId} from '../redux/actions';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
 
-const WorkOrderHistory = props => {
+const WorkOrderDetail = props => {
   const {navigation, onSetUserInfo, userInfo, workOrderInfo, onSetWorkOrder} =
     props;
   const [init, setInit] = useState(false);
-  const [workOrder, setWorkOrder] = useState([]);
-  const [searchQuery, setSearchQuery] = React.useState('');
-
-  const onChangeSearch = query => setSearchQuery(query);
+  const [workOrderDetails, setWorkOrderDetail] = useState([]);
 
   async function getWorkOrder() {
-    let id = userInfo.id;
-    console.log('id get from redux: ', id);
+    let id = workOrderInfo.id;
+    console.log('work order id get from redux: ', id);
     let url;
-    if (searchQuery.length !== 0) {
-      url = `api/workOrderHistory/${id}?searchText=${searchQuery}`;
-    } else {
-      url = `api/workOrderHistory/${id}`;
-    }
+    url = `api/workOrder/detail/${id}`;
     try {
       const response = await get(url);
       const json = await response;
-      setWorkOrder(json.data);
-      console.log(workOrder);
+      console.log('json: ', json);
+      setWorkOrderDetail(json.data);
+      console.log('work order: ', workOrderDetails);
     } catch (error) {
       console.log(error);
     }
   }
 
-  async function getWorkOrderById(id) {
-    const woId = {id};
-    onSetWorkOrder(woId);
-    console.log('state: ', workOrderInfo);
-    navigation.navigate('WorkOrderDetail');
-  }
-
   useEffect(() => {
     getWorkOrder();
     setInit(true);
-  }, [searchQuery, init]);
+  }, [init]);
 
   return (
     <>
@@ -111,47 +97,79 @@ const WorkOrderHistory = props => {
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.container}>
-        <Text style={styles.head}>Work Order: TODO</Text>
-        <Searchbar
-          placeholder="Search"
-          onChangeText={onChangeSearch}
-          value={searchQuery}
-        />
-        <DataTable>
-          <DataTable.Header style={styles.table}>
-            <DataTable.Title style={{flex: 2}}>
-              <Text style={styles.title}>Date</Text>
-            </DataTable.Title>
-            <DataTable.Title style={{flex: 2}}>
-              <Text style={styles.title}>Code</Text>
-            </DataTable.Title>
-            <DataTable.Title>
-              <Text style={styles.title}>Status</Text>
-            </DataTable.Title>
-          </DataTable.Header>
-          {workOrder.map(item => (
-            <>
-              <DataTable.Row
-                style={styles.table}
-                onPress={() => {
-                  getWorkOrderById(item.id);
-                }}>
-                <DataTable.Cell style={{flex: 2}}>
-                  {Moment(item.maintenance_date).add(1, 'day').format('L')}
-                </DataTable.Cell>
-                <DataTable.Cell style={{flex: 2}}>
-                  {item.item_code}
-                </DataTable.Cell>
-                <DataTable.Cell>{item.status}</DataTable.Cell>
-              </DataTable.Row>
-            </>
-          ))}
-        </DataTable>
+        <Text style={styles.head}>Work Order</Text>
+        {workOrderDetails.map(item => (
+          <DataTable>
+            <DataTable.Row>
+              <DataTable.Cell>
+                <Text>Maintenance Name</Text>
+              </DataTable.Cell>
+              <DataTable.Cell>
+                <Text>{item.item_code}</Text>
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>
+                <Text>Maintenance Date</Text>
+              </DataTable.Cell>
+              <DataTable.Cell>
+                <Text>{item.maintenance_date}</Text>
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>
+                <Text>Maintenance Time</Text>
+              </DataTable.Cell>
+              <DataTable.Cell>
+                <Text>{item.maintenance_time}</Text>
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>
+                <Text>Status</Text>
+              </DataTable.Cell>
+              <DataTable.Cell>
+                <Text>{item.status}</Text>
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>
+                <Text>Technician Name</Text>
+              </DataTable.Cell>
+              <DataTable.Cell>
+                <Text>{item.technician_name}</Text>
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>
+                <Text>Technician Contact</Text>
+              </DataTable.Cell>
+              <DataTable.Cell>
+                <Text>{item.technician_contact}</Text>
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>
+                <Text>Item Code</Text>
+              </DataTable.Cell>
+              <DataTable.Cell>
+                <Text>{item.item_code}</Text>
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>
+                <Text>Item Name</Text>
+              </DataTable.Cell>
+              <DataTable.Cell>
+                <Text>{item.item_name}</Text>
+              </DataTable.Cell>
+            </DataTable.Row>
+          </DataTable>
+        ))}
       </ScrollView>
     </>
   );
 };
-
 const styles = StyleSheet.create({
   nav: {
     flexDirection: 'row',
@@ -174,11 +192,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     backgroundColor: 'lightgrey',
   },
-  table: {
+  header: {
     flexDirection: 'row',
     width: '100%',
     borderBottomColor: 'black',
     borderBottomWidth: 1,
+    fontSize: 10,
+    color: 'black',
     textAlign: 'left',
   },
   head: {
@@ -189,10 +209,6 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     marginTop: -10,
   },
-  title: {
-    fontSize: 18,
-    color: 'black',
-  },
   buttonIcon: {
     position: 'absolute',
     right: 5,
@@ -202,7 +218,7 @@ const styles = StyleSheet.create({
   },
 });
 
-WorkOrderHistory.propTypes = {
+WorkOrderDetail.propTypes = {
   navigation: PropTypes.object,
   onSetUserInfo: PropTypes.func,
   onSetWorkOrder: PropTypes.func,
@@ -223,4 +239,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(withTranslation()(WorkOrderHistory));
+)(withTranslation()(WorkOrderDetail));

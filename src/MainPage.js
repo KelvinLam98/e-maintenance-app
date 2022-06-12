@@ -54,9 +54,17 @@ const MainPage = props => {
       const response = await get(url);
       const json = await response;
       setWorkOrder(json.data);
+      console.log(workOrder);
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async function getWorkOrderById(id) {
+    const woId = {id};
+    onSetWorkOrder(woId);
+    console.log('state: ', workOrderInfo);
+    navigation.navigate('WorkOrderDetail');
   }
 
   useEffect(() => {
@@ -126,13 +134,7 @@ const MainPage = props => {
               <DataTable.Row
                 style={styles.table}
                 onPress={() => {
-                  onSetWorkOrder(item.id);
-                  console.log(
-                    'pressed row id: ',
-                    workOrderInfo.id,
-                    'item: ',
-                    item,
-                  );
+                  getWorkOrderById(item.id);
                 }}>
                 <DataTable.Cell style={{flex: 2}}>
                   {Moment(item.maintenance_date).add(1, 'day').format('L')}
