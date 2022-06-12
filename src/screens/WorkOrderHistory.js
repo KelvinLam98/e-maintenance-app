@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 /**
  * Sample React Native App
@@ -19,32 +20,41 @@ import {
   FlatList,
   Table,
   ScrollView,
+  Alert,
 } from 'react-native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {get, post, resource} from '../common/ServerApi';
-import {DataTable} from 'react-native-paper';
+import {DataTable, Searchbar} from 'react-native-paper';
 import Moment from 'moment';
 
-const Profile = ({navigation}) => {
+const WorkOrderHistory = ({navigation}) => {
   const [init, setInit] = useState(false);
   const [workOrder, setWorkOrder] = useState([]);
-  const [page, setPage] = React.useState<number>(1);
+  const [searchQuery, setSearchQuery] = React.useState('');
+
+  const onChangeSearch = query => setSearchQuery(query);
+
   async function getWorkOrder() {
+    let url;
+    if (searchQuery.length !== 0) {
+      url = `api/workOrderHistory?searchText=${searchQuery}`;
+    } else {
+      url = 'api/workOrderHistory';
+    }
     try {
-      const response = await get('api/workOrder');
-      console.log('debug1===', response);
+      const response = await get(url);
       const json = await response;
       setWorkOrder(json.data);
-      console.log('debug2===', json.data);
     } catch (error) {
-      console.error(error);
+      Alert.alert('error');
     }
   }
+
   useEffect(() => {
-    setInit(true);
     getWorkOrder();
-  }, [init]);
+    setInit(true);
+  }, [init, searchQuery]);
 
   return (
     <>
@@ -71,10 +81,12 @@ const Profile = ({navigation}) => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('MainPage')}>
-          <Text>Home</Text>
+          <Text>Work Order</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text>Maintenance</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('WorkOrderHistory')}>
+          <Text>History</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
@@ -82,7 +94,42 @@ const Profile = ({navigation}) => {
           <Text>Profile</Text>
         </TouchableOpacity>
       </View>
-      <Text>WorkOrderHistory Page</Text>
+      <ScrollView style={styles.container}>
+        <Text style={styles.head}>Work Order: TODO</Text>
+        <Searchbar
+          placeholder="Search"
+          onChangeText={onChangeSearch}
+          value={searchQuery}
+        />
+        <DataTable>
+          <DataTable.Header style={styles.table}>
+            <DataTable.Title style={{flex: 2}}>
+              <Text style={styles.title}>Date</Text>
+            </DataTable.Title>
+            <DataTable.Title style={{flex: 2}}>
+              <Text style={styles.title}>Code</Text>
+            </DataTable.Title>
+            <DataTable.Title>
+              <Text style={styles.title}>Status</Text>
+            </DataTable.Title>
+          </DataTable.Header>
+          {workOrder.map(item => (
+            <>
+              <DataTable.Row
+                style={styles.table}
+                onPress={() => console.log('pressed row')}>
+                <DataTable.Cell style={{flex: 2}}>
+                  {Moment(item.maintenance_date).add(1, 'day').format('L')}
+                </DataTable.Cell>
+                <DataTable.Cell style={{flex: 2}}>
+                  {item.item_code}
+                </DataTable.Cell>
+                <DataTable.Cell>{item.status}</DataTable.Cell>
+              </DataTable.Row>
+            </>
+          ))}
+        </DataTable>
+      </ScrollView>
     </>
   );
 };
@@ -109,13 +156,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     backgroundColor: 'lightgrey',
   },
-  header: {
+  table: {
     flexDirection: 'row',
     width: '100%',
     borderBottomColor: 'black',
     borderBottomWidth: 1,
-    fontSize: 10,
-    color: 'black',
     textAlign: 'left',
   },
   head: {
@@ -126,6 +171,10 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     marginTop: -10,
   },
+  title: {
+    fontSize: 18,
+    color: 'black',
+  },
   buttonIcon: {
     position: 'absolute',
     right: 5,
@@ -135,4 +184,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Profile;
+export default WorkOrderHistory;

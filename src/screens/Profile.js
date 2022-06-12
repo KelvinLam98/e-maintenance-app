@@ -30,20 +30,9 @@ const Profile = ({navigation}) => {
   const [init, setInit] = useState(false);
   const [workOrder, setWorkOrder] = useState([]);
   const [page, setPage] = React.useState<number>(1);
-  async function getWorkOrder() {
-    try {
-      const response = await get('api/workOrder');
-      console.log('debug1===', response);
-      const json = await response;
-      setWorkOrder(json.data);
-      console.log('debug2===', json.data);
-    } catch (error) {
-      console.error(error);
-    }
-  }
+
   useEffect(() => {
     setInit(true);
-    getWorkOrder();
   }, [init]);
 
   return (
@@ -71,10 +60,12 @@ const Profile = ({navigation}) => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('MainPage')}>
-          <Text>Home</Text>
+          <Text>Work Order</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text>Maintenance</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('WorkOrderHistory')}>
+          <Text>History</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}

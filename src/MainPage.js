@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 /**
  * Sample React Native App
@@ -19,32 +20,48 @@ import {
   FlatList,
   Table,
   ScrollView,
+  Alert,
 } from 'react-native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {get, post, resource} from './common/ServerApi';
-import {DataTable} from 'react-native-paper';
+import {DataTable, Searchbar} from 'react-native-paper';
 import Moment from 'moment';
+import {setUserInfo} from './redux/actions';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {withTranslation} from 'react-i18next';
 
-const MainPage = ({navigation}) => {
+const MainPage = props => {
+  const {navigation, onSetUserInfo, userInfo} = props;
   const [init, setInit] = useState(false);
   const [workOrder, setWorkOrder] = useState([]);
-  const [page, setPage] = React.useState<number>(1);
+  const [searchQuery, setSearchQuery] = React.useState('');
+
+  const onChangeSearch = query => setSearchQuery(query);
+
   async function getWorkOrder() {
+    let id = userInfo.id;
+    console.log('id get from redux: ', id);
+    let url;
+    if (searchQuery.length !== 0) {
+      url = `api/workOrder/${id}?searchText=${searchQuery}`;
+    } else {
+      url = `api/workOrder/${id}`;
+    }
     try {
-      const response = await get('api/workOrder');
-      console.log('debug1===', response);
+      const response = await get(url);
       const json = await response;
       setWorkOrder(json.data);
-      console.log('debug2===', json.data);
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   }
+
   useEffect(() => {
-    setInit(true);
     getWorkOrder();
-  }, [init]);
+    setInit(true);
+  }, [searchQuery, init]);
 
   return (
     <>
@@ -71,10 +88,12 @@ const MainPage = ({navigation}) => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('MainPage')}>
-          <Text>Home</Text>
+          <Text>Work Order</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Text>Maintenance</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('WorkOrderHistory')}>
+          <Text>History</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
@@ -83,24 +102,34 @@ const MainPage = ({navigation}) => {
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.container}>
+        <Text style={styles.head}>Work Order: TODO</Text>
+        <Searchbar
+          placeholder="Search"
+          onChangeText={onChangeSearch}
+          value={searchQuery}
+        />
         <DataTable>
-          <DataTable.Header style={styles.header}>
-            <DataTable.Title style={{flex: 2}}>Date</DataTable.Title>
+          <DataTable.Header style={styles.table}>
             <DataTable.Title style={{flex: 2}}>
-              Maintenance Name
+              <Text style={styles.title}>Date</Text>
             </DataTable.Title>
-            <DataTable.Title>Status</DataTable.Title>
+            <DataTable.Title style={{flex: 2}}>
+              <Text style={styles.title}>Code</Text>
+            </DataTable.Title>
+            <DataTable.Title>
+              <Text style={styles.title}>Status</Text>
+            </DataTable.Title>
           </DataTable.Header>
           {workOrder.map(item => (
             <>
               <DataTable.Row
-                style={styles.header}
+                style={styles.table}
                 onPress={() => console.log('pressed row')}>
                 <DataTable.Cell style={{flex: 2}}>
-                  {Moment(item.maintenance_date).format('LL')}
+                  {Moment(item.maintenance_date).add(1, 'day').format('L')}
                 </DataTable.Cell>
                 <DataTable.Cell style={{flex: 2}}>
-                  {item.maintenance_name}
+                  {item.item_code}
                 </DataTable.Cell>
                 <DataTable.Cell>{item.status}</DataTable.Cell>
               </DataTable.Row>
@@ -134,13 +163,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     backgroundColor: 'lightgrey',
   },
-  header: {
+  table: {
     flexDirection: 'row',
     width: '100%',
     borderBottomColor: 'black',
     borderBottomWidth: 1,
-    fontSize: 10,
-    color: 'black',
     textAlign: 'left',
   },
   head: {
@@ -151,6 +178,10 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     marginTop: -10,
   },
+  title: {
+    fontSize: 18,
+    color: 'black',
+  },
   buttonIcon: {
     position: 'absolute',
     right: 5,
@@ -160,4 +191,21 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MainPage;
+MainPage.propTypes = {
+  navigation: PropTypes.object,
+  onSetUserInfo: PropTypes.func,
+  userInfo: PropTypes.object,
+};
+
+const mapStateToProps = state => ({
+  userInfo: state.app.userInfo,
+});
+
+const mapDispatchToProps = dispatch => ({
+  onSetUserInfo: values => dispatch(setUserInfo(values)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withTranslation()(MainPage));
