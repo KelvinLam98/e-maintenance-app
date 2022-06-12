@@ -35,10 +35,16 @@ const Login = props => {
         loginPassword: password,
       });
       if (response.loginIsAuthenticated === true) {
+        const login = {
+          ...response.user,
+          token: response.jwtToken,
+          readOnlyToken: response.readOnlyJwtToken,
+        };
+        console.log('login: ', login);
         console.log('initial state: ', stores.getState().app);
+        onSetUserInfo(login);
         const state = stores.getState().app;
-        onSetUserInfo();
-        console.log('login success state: ', state.id);
+        console.log('login success state: ', state);
         navigation.navigate('MainPage');
       } else {
         Alert.alert('Cannot login');
@@ -120,7 +126,7 @@ Login.propTypes = {
 };
 
 const mapDispatchToProps = dispatch => ({
-  onSetUserInfo: () => dispatch(setUserInfo()),
+  onSetUserInfo: values => dispatch(setUserInfo(values)),
 });
 
 export default connect(null, mapDispatchToProps)(withTranslation()(Login));
