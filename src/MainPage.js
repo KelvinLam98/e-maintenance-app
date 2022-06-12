@@ -27,8 +27,13 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {get, post, resource} from './common/ServerApi';
 import {DataTable, Searchbar} from 'react-native-paper';
 import Moment from 'moment';
+import {setUserInfo} from './redux/actions';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {withTranslation} from 'react-i18next';
 
-const MainPage = ({navigation}) => {
+const MainPage = props => {
+  const {navigation, onSetUserInfo, userInfo} = props;
   const [init, setInit] = useState(false);
   const [workOrder, setWorkOrder] = useState([]);
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -36,11 +41,13 @@ const MainPage = ({navigation}) => {
   const onChangeSearch = query => setSearchQuery(query);
 
   async function getWorkOrder() {
+    let id = userInfo.id;
+    console.log('id get from redux: ', id);
     let url;
     if (searchQuery.length !== 0) {
-      url = `api/workOrder?searchText=${searchQuery}`;
+      url = `api/workOrder/${id}?searchText=${searchQuery}`;
     } else {
-      url = 'api/workOrder';
+      url = `api/workOrder/${id}`;
     }
     try {
       const response = await get(url);
@@ -184,4 +191,21 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MainPage;
+MainPage.propTypes = {
+  navigation: PropTypes.object,
+  onSetUserInfo: PropTypes.func,
+  userInfo: PropTypes.object,
+};
+
+const mapStateToProps = state => ({
+  userInfo: state.app.userInfo,
+});
+
+const mapDispatchToProps = dispatch => ({
+  onSetUserInfo: values => dispatch(setUserInfo(values)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withTranslation()(MainPage));
