@@ -34,6 +34,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
 import DatePicker from 'react-native-date-picker';
+import {Picker} from '@react-native-picker/picker';
 
 const UpdateWorkOrder = props => {
   const {navigation, onSetUserInfo, userInfo, workOrderInfo, onSetWorkOrder} =
@@ -43,6 +44,7 @@ const UpdateWorkOrder = props => {
   const [datePicker, setDatePicker] = useState(false);
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState('');
+  const [selectedLanguage, setSelectedLanguage] = useState();
 
   async function getUpdateWorkOrderRequest(inputDate, inputTime, inputStatus) {
     let id = workOrderInfo.id;
@@ -120,23 +122,28 @@ const UpdateWorkOrder = props => {
             }}
           />
           <Text>Time: </Text>
-          <TextInput
-            style={styles.textInput}
-            autoCapitalize="none"
-            autoCorrect={false}
-            placeholder="Time"
-            value={time}
-            onChangeText={newValue => setTime(newValue)}
-          />
+          <Picker
+            selectedValue={time}
+            onValueChange={(itemValue, itemIndex) => setTime(itemValue)}>
+            <Picker.Item label="09:00" value="09:00" />
+            <Picker.Item label="10:00" value="10:00" />
+            <Picker.Item label="11:00" value="11:00" />
+            <Picker.Item label="12:00" value="12:00" />
+            <Picker.Item label="13:00" value="13:00" />
+            <Picker.Item label="14:00" value="14:00" />
+            <Picker.Item label="15:00" value="15:00" />
+            <Picker.Item label="16:00" value="16:00" />
+            <Picker.Item label="17:00" value="17:00" />
+            <Picker.Item label="18:00" value="18:00" />
+          </Picker>
           <Text>Status: </Text>
-          <TextInput
-            style={styles.textInput}
-            autoCapitalize="none"
-            autoCorrect={false}
-            placeholder="IC"
-            value={status}
-            onChangeText={newValue => setStatus(newValue)}
-          />
+          <Picker
+            selectedValue={status}
+            onValueChange={(itemValue, itemIndex) => setStatus(itemValue)}>
+            <Picker.Item label="Created" value="Created" />
+            <Picker.Item label="In Progress" value="In Progress" />
+            <Picker.Item label="Completed" value="Completed" />
+          </Picker>
           <Button
             title="Submit"
             onPress={newValue => getUpdateWorkOrderRequest(date, time, status)}
