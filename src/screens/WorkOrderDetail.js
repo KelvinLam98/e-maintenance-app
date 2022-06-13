@@ -83,106 +83,77 @@ const WorkOrderDetail = props => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('MainPage')}>
-          <Text>Work Order</Text>
+          <Text style={styles.textStyle}>Work Order</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('WorkOrderHistory')}>
-          <Text>History</Text>
+          <Text style={styles.textStyle}>History</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('Profile')}>
-          <Text>Profile</Text>
+          <Text style={styles.textStyle}>Profile</Text>
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.container}>
-        <Text style={styles.head}>
+        <Text style={{fontSize: 25, color: 'black'}}>
           Work Order {'  '}
           <TouchableOpacity
+            style={styles.editButton}
             onPress={() => navigation.navigate('UpdateWorkOrder')}>
-            <Text>Edit</Text>
+            <Text style={styles.textStyleBtn}>Edit</Text>
           </TouchableOpacity>
         </Text>
         {workOrderDetails.map(item => (
-          <DataTable>
-            <DataTable.Row>
-              <DataTable.Cell>
-                <Text>Maintenance Name</Text>
-              </DataTable.Cell>
-              <DataTable.Cell>
-                <Text>{item.item_code}</Text>
-              </DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-              <DataTable.Cell>
-                <Text>Maintenance Date</Text>
-              </DataTable.Cell>
-              <DataTable.Cell>
-                <Text>
+          <>
+            <View style={styles.card}>
+              <View style={styles.listRow}>
+                <Text style={styles.textStyle}>Maintenance Code: </Text>
+                <Text style={styles.textStyle}>{item.item_code}</Text>
+              </View>
+              <View style={styles.listRow}>
+                <Text style={styles.textStyle}>Maintenance Name: </Text>
+                <Text style={styles.textStyle}>{item.item_name}</Text>
+              </View>
+              <View style={styles.listRow}>
+                <Text style={styles.textStyle}>Maintenance Date: </Text>
+                <Text style={styles.textStyle}>
                   {Moment(item.maintenance_date).add(1, 'day').format('L')}
                 </Text>
-              </DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-              <DataTable.Cell>
-                <Text>Maintenance Time</Text>
-              </DataTable.Cell>
-              <DataTable.Cell>
-                <Text>{item.maintenance_time}</Text>
-              </DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-              <DataTable.Cell>
-                <Text>Status</Text>
-              </DataTable.Cell>
-              <DataTable.Cell>
-                <Text>{item.status}</Text>
-              </DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-              <DataTable.Cell>
-                <Text>Technician Name</Text>
-              </DataTable.Cell>
-              <DataTable.Cell>
-                <Text>{item.technician_name}</Text>
-              </DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-              <DataTable.Cell>
-                <Text>Technician Contact</Text>
-              </DataTable.Cell>
-              <DataTable.Cell>
-                <Text>{item.technician_contact}</Text>
-              </DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-              <DataTable.Cell>
-                <Text>Item Code</Text>
-              </DataTable.Cell>
-              <DataTable.Cell>
-                <Text>{item.item_code}</Text>
-              </DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-              <DataTable.Cell>
-                <Text>Item Name</Text>
-              </DataTable.Cell>
-              <DataTable.Cell>
-                <Text>{item.item_name}</Text>
-              </DataTable.Cell>
-            </DataTable.Row>
-          </DataTable>
+              </View>
+              <View style={styles.listRow}>
+                <Text style={styles.textStyle}>Maintenance Time: </Text>
+                <Text style={styles.textStyle}>{item.maintenance_time}</Text>
+              </View>
+              <View style={styles.listRow}>
+                <Text style={styles.textStyle}>Technician Name: </Text>
+                <Text style={styles.textStyle}>{item.technician_name}</Text>
+              </View>
+              <View style={styles.listRow}>
+                <Text style={styles.textStyle}>Technician Contact: </Text>
+                <Text style={styles.textStyle}>{item.technician_contact}</Text>
+              </View>
+              <View style={styles.listRow}>
+                <Text style={styles.textStyle}>Status: </Text>
+                <Text style={styles.textStyle}>{item.status}</Text>
+              </View>
+            </View>
+          </>
         ))}
       </ScrollView>
     </>
   );
 };
+
 const styles = StyleSheet.create({
   nav: {
     flexDirection: 'row',
     width: '100%',
-    backgroundColor: 'white',
+    backgroundColor: 'azure',
+    borderColor: 'beige',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
   },
   button: {
     width: '33.33%',
@@ -190,24 +161,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 1,
     elevation: 20,
-    backgroundColor: 'white',
+    backgroundColor: 'azure',
     paddingVertical: 10,
     paddingHorizontal: 12,
   },
+  editButton: {
+    padding: 10,
+    backgroundColor: 'royalblue',
+  },
   container: {
     flex: 1,
-    paddingTop: 30,
+    paddingVertical: 15,
     paddingHorizontal: 30,
-    backgroundColor: 'lightgrey',
-  },
-  header: {
-    flexDirection: 'row',
-    width: '100%',
-    borderBottomColor: 'black',
-    borderBottomWidth: 1,
-    fontSize: 10,
-    color: 'black',
-    textAlign: 'left',
+    backgroundColor: 'azure',
   },
   head: {
     fontSize: 25,
@@ -216,6 +182,7 @@ const styles = StyleSheet.create({
     padding: 5,
     paddingBottom: 10,
     marginTop: -10,
+    backgroundColor: 'azure',
   },
   buttonIcon: {
     position: 'absolute',
@@ -223,6 +190,26 @@ const styles = StyleSheet.create({
     top: 5,
     paddingVertical: 5,
     marginBottom: 1,
+  },
+  card: {
+    backgroundColor: 'beige',
+    padding: 20,
+  },
+  listRow: {
+    paddingBottom: 10,
+    paddingTop: 10,
+    borderBottomColor: 'lightgrey',
+    borderBottomWidth: 1,
+  },
+  textStyle: {
+    fontSize: 15,
+    color: 'black',
+    textAlign: 'left',
+  },
+  textStyleBtn: {
+    fontSize: 15,
+    color: 'white',
+    textAlign: 'left',
   },
 });
 

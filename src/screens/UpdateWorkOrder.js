@@ -90,64 +90,80 @@ const UpdateWorkOrder = props => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('MainPage')}>
-          <Text>Work Order</Text>
+          <Text style={styles.textStyle}>Work Order</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('WorkOrderHistory')}>
-          <Text>History</Text>
+          <Text style={styles.textStyle}>History</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('Profile')}>
-          <Text>Profile</Text>
+          <Text style={styles.textStyle}>Profile</Text>
         </TouchableOpacity>
       </View>
       <SafeAreaView style={{flex: 1}}>
         <ScrollView style={styles.container}>
           <Text style={styles.head}>Edit</Text>
-          <Text>Date: {date.toDateString()}</Text>
-          <Button title="Choose Date" onPress={() => setDatePicker(true)} />
-          <DatePicker
-            modal
-            open={datePicker}
-            date={date}
-            mode="date"
-            onConfirm={date => {
-              setDatePicker(false);
-              setDate(date);
-            }}
-            onCancel={() => {
-              setDatePicker(false);
-            }}
-          />
-          <Text>Time: </Text>
-          <Picker
-            selectedValue={time}
-            onValueChange={(itemValue, itemIndex) => setTime(itemValue)}>
-            <Picker.Item label="09:00" value="09:00" />
-            <Picker.Item label="10:00" value="10:00" />
-            <Picker.Item label="11:00" value="11:00" />
-            <Picker.Item label="12:00" value="12:00" />
-            <Picker.Item label="13:00" value="13:00" />
-            <Picker.Item label="14:00" value="14:00" />
-            <Picker.Item label="15:00" value="15:00" />
-            <Picker.Item label="16:00" value="16:00" />
-            <Picker.Item label="17:00" value="17:00" />
-            <Picker.Item label="18:00" value="18:00" />
-          </Picker>
-          <Text>Status: </Text>
-          <Picker
-            selectedValue={status}
-            onValueChange={(itemValue, itemIndex) => setStatus(itemValue)}>
-            <Picker.Item label="Created" value="Created" />
-            <Picker.Item label="In Progress" value="In Progress" />
-            <Picker.Item label="Completed" value="Completed" />
-          </Picker>
-          <Button
-            title="Submit"
-            onPress={newValue => getUpdateWorkOrderRequest(date, time, status)}
-          />
+          <View style={styles.card}>
+            <View style={styles.listRow}>
+              <Text style={styles.textStyle}>Date: {date.toDateString()}</Text>
+              <Button
+                title="Choose Date"
+                color="green"
+                onPress={() => setDatePicker(true)}
+              />
+              <DatePicker
+                modal
+                open={datePicker}
+                date={date}
+                mode="date"
+                onConfirm={date => {
+                  setDatePicker(false);
+                  setDate(date);
+                }}
+                onCancel={() => {
+                  setDatePicker(false);
+                }}
+              />
+            </View>
+            <View style={styles.listRow}>
+              <Text style={styles.textStyle}>Time: </Text>
+              <Picker
+                selectedValue={time}
+                onValueChange={(itemValue, itemIndex) => setTime(itemValue)}>
+                <Picker.Item label="09:00" value="09:00" />
+                <Picker.Item label="10:00" value="10:00" />
+                <Picker.Item label="11:00" value="11:00" />
+                <Picker.Item label="12:00" value="12:00" />
+                <Picker.Item label="13:00" value="13:00" />
+                <Picker.Item label="14:00" value="14:00" />
+                <Picker.Item label="15:00" value="15:00" />
+                <Picker.Item label="16:00" value="16:00" />
+                <Picker.Item label="17:00" value="17:00" />
+                <Picker.Item label="18:00" value="18:00" />
+              </Picker>
+            </View>
+            <View style={styles.listRow}>
+              <Text style={styles.textStyle}>Status: </Text>
+              <Picker
+                selectedValue={status}
+                onValueChange={(itemValue, itemIndex) => setStatus(itemValue)}>
+                <Picker.Item label="Created" value="Created" />
+                <Picker.Item label="In Progress" value="In Progress" />
+                <Picker.Item label="Completed" value="Completed" />
+              </Picker>
+            </View>
+
+            <Button
+              title="Submit"
+              color="royalblue"
+              onPress={newValue =>
+                getUpdateWorkOrderRequest(date, time, status)
+              }
+            />
+          </View>
         </ScrollView>
       </SafeAreaView>
     </>
@@ -158,7 +174,10 @@ const styles = StyleSheet.create({
   nav: {
     flexDirection: 'row',
     width: '100%',
-    backgroundColor: 'white',
+    backgroundColor: 'azure',
+    borderColor: 'beige',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
   },
   button: {
     width: '33.33%',
@@ -166,24 +185,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 1,
     elevation: 20,
-    backgroundColor: 'white',
+    backgroundColor: 'azure',
     paddingVertical: 10,
     paddingHorizontal: 12,
   },
+  editButton: {
+    padding: 10,
+    backgroundColor: 'royalblue',
+  },
   container: {
     flex: 1,
-    paddingTop: 30,
+    paddingVertical: 15,
     paddingHorizontal: 30,
-    backgroundColor: 'lightgrey',
-  },
-  header: {
-    flexDirection: 'row',
-    width: '100%',
-    borderBottomColor: 'black',
-    borderBottomWidth: 1,
-    fontSize: 10,
-    color: 'black',
-    textAlign: 'left',
+    backgroundColor: 'azure',
   },
   head: {
     fontSize: 25,
@@ -192,6 +206,7 @@ const styles = StyleSheet.create({
     padding: 5,
     paddingBottom: 10,
     marginTop: -10,
+    backgroundColor: 'azure',
   },
   buttonIcon: {
     position: 'absolute',
@@ -200,12 +215,25 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     marginBottom: 1,
   },
-  datePicker: {
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    width: 320,
-    height: 260,
-    display: 'flex',
+  card: {
+    backgroundColor: 'beige',
+    padding: 20,
+  },
+  listRow: {
+    paddingBottom: 10,
+    paddingTop: 10,
+    borderBottomColor: 'lightgrey',
+    borderBottomWidth: 1,
+  },
+  textStyle: {
+    fontSize: 15,
+    color: 'black',
+    textAlign: 'left',
+  },
+  textStyleBtn: {
+    fontSize: 15,
+    color: 'white',
+    textAlign: 'left',
   },
 });
 
