@@ -82,48 +82,51 @@ const Profile = props => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('MainPage')}>
-          <Text>Work Order</Text>
+          <Text style={styles.textStyle}>Work Order</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('WorkOrderHistory')}>
-          <Text>History</Text>
+          <Text style={styles.textStyle}>History</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('Profile')}>
-          <Text>Profile</Text>
+          <Text style={styles.textStyle}>Profile</Text>
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.container}>
         <Text style={styles.head}>
           Profile {'  '}
           <TouchableOpacity
+            style={styles.editButton}
             onPress={() => navigation.navigate('UpdateProfile')}>
-            <Text>Edit</Text>
+            <Text style={styles.textStyleBtn}>Edit</Text>
           </TouchableOpacity>
         </Text>
         {profileDetail.map(item => (
           <>
-            <View>
-              <Text style={styles.firstRow}>Name: </Text>
-              <Text>{item.name}</Text>
-            </View>
-            <View>
-              <Text style={styles.firstRow}>IC Number: </Text>
-              <Text>{item.ic_number}</Text>
-            </View>
-            <View>
-              <Text style={styles.firstRow}>Contact Number: </Text>
-              <Text>{item.contact_number}</Text>
-            </View>
-            <View>
-              <Text style={styles.firstRow}>Email: </Text>
-              <Text>{item.email}</Text>
-            </View>
-            <View>
-              <Text style={styles.firstRow}>Address: </Text>
-              <Text>{item.address}</Text>
+            <View style={styles.card}>
+              <View style={styles.listRow}>
+                <Text style={styles.textStyle}>Name: </Text>
+                <Text style={styles.textStyle}>{item.name}</Text>
+              </View>
+              <View style={styles.listRow}>
+                <Text style={styles.textStyle}>IC Number: </Text>
+                <Text style={styles.textStyle}>{item.ic_number}</Text>
+              </View>
+              <View style={styles.listRow}>
+                <Text style={styles.textStyle}>Contact Number: </Text>
+                <Text style={styles.textStyle}>{item.contact_number}</Text>
+              </View>
+              <View style={styles.listRow}>
+                <Text style={styles.textStyle}>Email: </Text>
+                <Text style={styles.textStyle}>{item.email}</Text>
+              </View>
+              <View style={styles.listRow}>
+                <Text style={styles.textStyle}>Address: </Text>
+                <Text style={styles.textStyle}>{item.address}</Text>
+              </View>
             </View>
           </>
         ))}
@@ -136,7 +139,10 @@ const styles = StyleSheet.create({
   nav: {
     flexDirection: 'row',
     width: '100%',
-    backgroundColor: 'white',
+    backgroundColor: 'azure',
+    borderColor: 'beige',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
   },
   button: {
     width: '33.33%',
@@ -144,24 +150,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 1,
     elevation: 20,
-    backgroundColor: 'white',
+    backgroundColor: 'azure',
     paddingVertical: 10,
     paddingHorizontal: 12,
   },
+  editButton: {
+    padding: 10,
+    backgroundColor: 'royalblue',
+  },
   container: {
     flex: 1,
-    paddingTop: 30,
+    paddingVertical: 15,
     paddingHorizontal: 30,
-    backgroundColor: 'lightgrey',
-  },
-  header: {
-    flexDirection: 'row',
-    width: '100%',
-    borderBottomColor: 'black',
-    borderBottomWidth: 1,
-    fontSize: 10,
-    color: 'black',
-    textAlign: 'left',
+    backgroundColor: 'azure',
   },
   head: {
     fontSize: 25,
@@ -170,6 +171,7 @@ const styles = StyleSheet.create({
     padding: 5,
     paddingBottom: 10,
     marginTop: -10,
+    backgroundColor: 'azure',
   },
   buttonIcon: {
     position: 'absolute',
@@ -178,8 +180,25 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     marginBottom: 1,
   },
-  firstRow: {
-    width: 75,
+  card: {
+    backgroundColor: 'beige',
+    padding: 20,
+  },
+  listRow: {
+    paddingBottom: 10,
+    paddingTop: 10,
+    borderBottomColor: 'lightgrey',
+    borderBottomWidth: 1,
+  },
+  textStyle: {
+    fontSize: 15,
+    color: 'black',
+    textAlign: 'left',
+  },
+  textStyleBtn: {
+    fontSize: 15,
+    color: 'white',
+    textAlign: 'left',
   },
 });
 

@@ -96,78 +96,91 @@ const UpdateProfile = props => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('MainPage')}>
-          <Text>Work Order</Text>
+          <Text style={styles.textStyle}>Work Order</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('WorkOrderHistory')}>
-          <Text>History</Text>
+          <Text style={styles.textStyle}>History</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('Profile')}>
-          <Text>Profile</Text>
+          <Text style={styles.textStyle}>Profile</Text>
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.container}>
         <Text style={styles.head}>Edit</Text>
-        <Text>Name: </Text>
-        <TextInput
-          style={styles.textInput}
-          autoCapitalize="none"
-          autoCorrect={false}
-          placeholder="Name"
-          value={name}
-          onChangeText={newValue => setName(newValue)}
-        />
-        <Text>Email: </Text>
-        <TextInput
-          style={styles.textInput}
-          autoCapitalize="none"
-          autoCorrect={false}
-          placeholder="Email"
-          value={email}
-          onChangeText={newValue => setEmail(newValue)}
-        />
-        <Text>IC: </Text>
-        <TextInput
-          style={styles.textInput}
-          autoCapitalize="none"
-          autoCorrect={false}
-          placeholder="IC"
-          value={icNumber}
-          onChangeText={newValue => setIcNumber(newValue)}
-        />
-        <Text>Contact Number: </Text>
-        <TextInput
-          style={styles.textInput}
-          autoCapitalize="none"
-          autoCorrect={false}
-          placeholder="Contact Number"
-          value={contactNumber}
-          onChangeText={newValue => setContactNumber(newValue)}
-        />
-        <Text>Address: </Text>
-        <TextInput
-          style={styles.textInput}
-          autoCapitalize="none"
-          autoCorrect={false}
-          placeholder="Address"
-          value={address}
-          onChangeText={newValue => setAddress(newValue)}
-        />
-        <Button
-          title="Submit"
-          onPress={newValue =>
-            getUpdateProfileRequest(
-              name,
-              email,
-              icNumber,
-              contactNumber,
-              address,
-            )
-          }
-        />
+        <View style={styles.card}>
+          <View style={styles.listRow}>
+            <Text style={styles.textStyle}>Name: </Text>
+            <TextInput
+              style={styles.textInput}
+              autoCapitalize="none"
+              autoCorrect={false}
+              placeholder="Name"
+              value={name}
+              onChangeText={newValue => setName(newValue)}
+            />
+          </View>
+          <View style={styles.listRow}>
+            <Text style={styles.textStyle}>Email: </Text>
+            <TextInput
+              style={styles.textInput}
+              autoCapitalize="none"
+              autoCorrect={false}
+              placeholder="Email"
+              value={email}
+              onChangeText={newValue => setEmail(newValue)}
+            />
+          </View>
+          <View style={styles.listRow}>
+            <Text style={styles.textStyle}>IC: </Text>
+            <TextInput
+              style={styles.textInput}
+              autoCapitalize="none"
+              autoCorrect={false}
+              placeholder="IC"
+              value={icNumber}
+              onChangeText={newValue => setIcNumber(newValue)}
+            />
+          </View>
+          <View style={styles.listRow}>
+            <Text style={styles.textStyle}>Contact Number: </Text>
+            <TextInput
+              style={styles.textInput}
+              autoCapitalize="none"
+              autoCorrect={false}
+              placeholder="Contact Number"
+              value={contactNumber}
+              onChangeText={newValue => setContactNumber(newValue)}
+            />
+          </View>
+          <View style={styles.listRow}>
+            <Text style={styles.textStyle}>Address: </Text>
+            <TextInput
+              style={styles.textInput}
+              autoCapitalize="none"
+              autoCorrect={false}
+              placeholder="Address"
+              value={address}
+              onChangeText={newValue => setAddress(newValue)}
+            />
+          </View>
+          <Button
+            title="Submit"
+            color="royalblue"
+            onPress={newValue =>
+              getUpdateProfileRequest(
+                name,
+                email,
+                icNumber,
+                contactNumber,
+                address,
+              )
+            }
+          />
+        </View>
       </ScrollView>
     </>
   );
@@ -177,7 +190,10 @@ const styles = StyleSheet.create({
   nav: {
     flexDirection: 'row',
     width: '100%',
-    backgroundColor: 'white',
+    backgroundColor: 'azure',
+    borderColor: 'beige',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
   },
   button: {
     width: '33.33%',
@@ -185,24 +201,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 1,
     elevation: 20,
-    backgroundColor: 'white',
+    backgroundColor: 'azure',
     paddingVertical: 10,
     paddingHorizontal: 12,
   },
-  container: {
-    flex: 1,
-    paddingTop: 30,
-    paddingHorizontal: 30,
+  editButton: {
+    borderColor: 'lightgrey',
+    borderWidth: 1,
+    padding: 10,
     backgroundColor: 'lightgrey',
   },
-  header: {
-    flexDirection: 'row',
-    width: '100%',
-    borderBottomColor: 'black',
-    borderBottomWidth: 1,
-    fontSize: 10,
-    color: 'black',
-    textAlign: 'left',
+  container: {
+    flex: 1,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    backgroundColor: 'azure',
   },
   head: {
     fontSize: 25,
@@ -211,6 +224,7 @@ const styles = StyleSheet.create({
     padding: 5,
     paddingBottom: 10,
     marginTop: -10,
+    backgroundColor: 'azure',
   },
   buttonIcon: {
     position: 'absolute',
@@ -218,6 +232,21 @@ const styles = StyleSheet.create({
     top: 5,
     paddingVertical: 5,
     marginBottom: 1,
+  },
+  card: {
+    backgroundColor: 'beige',
+    padding: 20,
+  },
+  listRow: {
+    padding: 10,
+    borderBottomColor: 'lightgrey',
+    borderBottomWidth: 1,
+    margin: 10,
+  },
+  textStyle: {
+    fontSize: 15,
+    color: 'black',
+    textAlign: 'left',
   },
 });
 
