@@ -113,7 +113,9 @@ const WorkOrderDetail = props => {
                 <Text>Maintenance Date</Text>
               </DataTable.Cell>
               <DataTable.Cell>
-                <Text>{item.maintenance_date}</Text>
+                <Text>
+                  {Moment(item.maintenance_date).add(1, 'day').format('L')}
+                </Text>
               </DataTable.Cell>
             </DataTable.Row>
             <DataTable.Row>

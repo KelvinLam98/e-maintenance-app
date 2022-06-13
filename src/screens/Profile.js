@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 /**
  * Sample React Native App
@@ -25,13 +26,34 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {get, post, resource} from '../common/ServerApi';
 import {DataTable} from 'react-native-paper';
 import Moment from 'moment';
+import {setUserInfo, setWorkOrderId} from '../redux/actions';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {withTranslation} from 'react-i18next';
 
-const Profile = ({navigation}) => {
+const Profile = props => {
+  const {navigation, onSetUserInfo, userInfo, workOrderInfo, onSetWorkOrder} =
+    props;
   const [init, setInit] = useState(false);
-  const [workOrder, setWorkOrder] = useState([]);
-  const [page, setPage] = React.useState<number>(1);
+  const [profileDetail, setProfileDetail] = useState([]);
 
+  async function getProfileDetail() {
+    let id = userInfo.id;
+    console.log('work order id get from redux: ', id);
+    let url;
+    url = `api/profile/${id}`;
+    try {
+      const response = await get(url);
+      const json = await response;
+      console.log('json: ', json);
+      setProfileDetail(json.data);
+      console.log('profile detail: ', profileDetail);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   useEffect(() => {
+    getProfileDetail();
     setInit(true);
   }, [init]);
 
@@ -73,7 +95,56 @@ const Profile = ({navigation}) => {
           <Text>Profile</Text>
         </TouchableOpacity>
       </View>
-      <Text>Profile Page</Text>
+      <ScrollView style={styles.container}>
+        <Text style={styles.head}>Profile</Text>
+        {profileDetail.map(item => (
+          <DataTable>
+            <DataTable.Row>
+              <DataTable.Cell>
+                <Text>Name</Text>
+              </DataTable.Cell>
+              <DataTable.Cell>
+                <Text>{item.name}</Text>
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>
+                <Text>IC Number</Text>
+              </DataTable.Cell>
+              <DataTable.Cell>
+                <Text>{item.ic_number}</Text>
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>
+                <Text>Contact Number</Text>
+              </DataTable.Cell>
+              <DataTable.Cell>
+                <Text>{item.contact_number}</Text>
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>
+                <Text>Address</Text>
+              </DataTable.Cell>
+            </DataTable.Row>
+
+            <DataTable.Row>
+              <DataTable.Cell>
+                <Text>{item.address}</Text>
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>
+                <Text>Email</Text>
+              </DataTable.Cell>
+              <DataTable.Cell>
+                <Text>{item.email}</Text>
+              </DataTable.Cell>
+            </DataTable.Row>
+          </DataTable>
+        ))}
+      </ScrollView>
     </>
   );
 };
@@ -126,4 +197,25 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Profile;
+Profile.propTypes = {
+  navigation: PropTypes.object,
+  onSetUserInfo: PropTypes.func,
+  onSetWorkOrder: PropTypes.func,
+  userInfo: PropTypes.object,
+  workOrderInfo: PropTypes.object,
+};
+
+const mapStateToProps = state => ({
+  userInfo: state.app.userInfo,
+  workOrderInfo: state.app.workOrderInfo,
+});
+
+const mapDispatchToProps = dispatch => ({
+  onSetUserInfo: values => dispatch(setUserInfo(values)),
+  onSetWorkOrder: values => dispatch(setWorkOrderId(values)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withTranslation()(Profile));
