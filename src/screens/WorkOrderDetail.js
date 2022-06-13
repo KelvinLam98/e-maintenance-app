@@ -97,7 +97,13 @@ const WorkOrderDetail = props => {
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.container}>
-        <Text style={styles.head}>Work Order</Text>
+        <Text style={styles.head}>
+          Work Order {'  '}
+          <TouchableOpacity
+            onPress={() => navigation.navigate('UpdateWorkOrder')}>
+            <Text>Edit</Text>
+          </TouchableOpacity>
+        </Text>
         {workOrderDetails.map(item => (
           <DataTable>
             <DataTable.Row>
