@@ -27,8 +27,14 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {get, post, resource} from '../common/ServerApi';
 import {DataTable, Searchbar} from 'react-native-paper';
 import Moment from 'moment';
+import {setUserInfo, setWorkOrderId} from '../redux/actions';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {withTranslation} from 'react-i18next';
 
-const WorkOrderHistory = ({navigation}) => {
+const WorkOrderHistory = props => {
+  const {navigation, onSetUserInfo, userInfo, workOrderInfo, onSetWorkOrder} =
+    props;
   const [init, setInit] = useState(false);
   const [workOrder, setWorkOrder] = useState([]);
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -36,25 +42,35 @@ const WorkOrderHistory = ({navigation}) => {
   const onChangeSearch = query => setSearchQuery(query);
 
   async function getWorkOrder() {
+    let id = userInfo.id;
+    console.log('id get from redux: ', id);
     let url;
     if (searchQuery.length !== 0) {
-      url = `api/workOrderHistory?searchText=${searchQuery}`;
+      url = `api/workOrderHistory/${id}?searchText=${searchQuery}`;
     } else {
-      url = 'api/workOrderHistory';
+      url = `api/workOrderHistory/${id}`;
     }
     try {
       const response = await get(url);
       const json = await response;
       setWorkOrder(json.data);
+      console.log(workOrder);
     } catch (error) {
-      Alert.alert('error');
+      console.log(error);
     }
+  }
+
+  async function getWorkOrderById(id) {
+    const woId = {id};
+    onSetWorkOrder(woId);
+    console.log('state: ', workOrderInfo);
+    navigation.navigate('WorkOrderDetail');
   }
 
   useEffect(() => {
     getWorkOrder();
     setInit(true);
-  }, [init, searchQuery]);
+  }, [searchQuery, init]);
 
   return (
     <>
@@ -117,7 +133,9 @@ const WorkOrderHistory = ({navigation}) => {
             <>
               <DataTable.Row
                 style={styles.table}
-                onPress={() => console.log('pressed row')}>
+                onPress={() => {
+                  getWorkOrderById(item.id);
+                }}>
                 <DataTable.Cell style={{flex: 2}}>
                   {Moment(item.maintenance_date).add(1, 'day').format('L')}
                 </DataTable.Cell>
@@ -184,4 +202,25 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WorkOrderHistory;
+WorkOrderHistory.propTypes = {
+  navigation: PropTypes.object,
+  onSetUserInfo: PropTypes.func,
+  onSetWorkOrder: PropTypes.func,
+  userInfo: PropTypes.object,
+  workOrderInfo: PropTypes.object,
+};
+
+const mapStateToProps = state => ({
+  userInfo: state.app.userInfo,
+  workOrderInfo: state.app.workOrderInfo,
+});
+
+const mapDispatchToProps = dispatch => ({
+  onSetUserInfo: values => dispatch(setUserInfo(values)),
+  onSetWorkOrder: values => dispatch(setWorkOrderId(values)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withTranslation()(WorkOrderHistory));

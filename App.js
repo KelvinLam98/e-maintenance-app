@@ -14,6 +14,7 @@ import MainPage from './src/MainPage';
 import Login from './src/screens/Login';
 import Profile from './src/screens/Profile';
 import WorkOrderHistory from './src/screens/WorkOrderHistory';
+import WorkOrderDetail from './src/screens/WorkOrderDetail';
 import {Provider} from 'react-redux';
 import stores from './src/redux/stores';
 
@@ -30,6 +31,7 @@ const App = () => {
           <Stack.Screen name="MainPage" component={MainPage} />
           <Stack.Screen name="Profile" component={Profile} />
           <Stack.Screen name="WorkOrderHistory" component={WorkOrderHistory} />
+          <Stack.Screen name="WorkOrderDetail" component={WorkOrderDetail} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

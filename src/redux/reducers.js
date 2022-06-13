@@ -7,8 +7,13 @@ const defaultUserInfo = {
   readOnlyToken: '',
 };
 
+const defaultWorkOrder = {
+  id: 0,
+};
+
 const INITIAL_STATE = {
   userInfo: defaultUserInfo,
+  workOrderInfo: defaultWorkOrder,
 };
 
 const reducers = (state = INITIAL_STATE, action) => {
@@ -22,6 +27,11 @@ const reducers = (state = INITIAL_STATE, action) => {
           token: action.token,
           readOnlyToken: action.readOnlyToken,
         },
+      };
+    case 'SET_WORK_ORDER_ID':
+      return {
+        ...state,
+        workOrderInfo: {id: action.id},
       };
     case 'SET_LOGOUT_USER_INFO':
       return {

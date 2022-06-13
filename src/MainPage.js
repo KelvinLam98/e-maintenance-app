@@ -27,13 +27,14 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {get, post, resource} from './common/ServerApi';
 import {DataTable, Searchbar} from 'react-native-paper';
 import Moment from 'moment';
-import {setUserInfo} from './redux/actions';
+import {setUserInfo, setWorkOrderId} from './redux/actions';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
 
 const MainPage = props => {
-  const {navigation, onSetUserInfo, userInfo} = props;
+  const {navigation, onSetUserInfo, userInfo, workOrderInfo, onSetWorkOrder} =
+    props;
   const [init, setInit] = useState(false);
   const [workOrder, setWorkOrder] = useState([]);
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -53,9 +54,17 @@ const MainPage = props => {
       const response = await get(url);
       const json = await response;
       setWorkOrder(json.data);
+      console.log(workOrder);
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async function getWorkOrderById(id) {
+    const woId = {id};
+    onSetWorkOrder(woId);
+    console.log('state: ', workOrderInfo);
+    navigation.navigate('WorkOrderDetail');
   }
 
   useEffect(() => {
@@ -124,7 +133,9 @@ const MainPage = props => {
             <>
               <DataTable.Row
                 style={styles.table}
-                onPress={() => console.log('pressed row')}>
+                onPress={() => {
+                  getWorkOrderById(item.id);
+                }}>
                 <DataTable.Cell style={{flex: 2}}>
                   {Moment(item.maintenance_date).add(1, 'day').format('L')}
                 </DataTable.Cell>
@@ -194,15 +205,19 @@ const styles = StyleSheet.create({
 MainPage.propTypes = {
   navigation: PropTypes.object,
   onSetUserInfo: PropTypes.func,
+  onSetWorkOrder: PropTypes.func,
   userInfo: PropTypes.object,
+  workOrderInfo: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
   userInfo: state.app.userInfo,
+  workOrderInfo: state.app.workOrderInfo,
 });
 
 const mapDispatchToProps = dispatch => ({
   onSetUserInfo: values => dispatch(setUserInfo(values)),
+  onSetWorkOrder: values => dispatch(setWorkOrderId(values)),
 });
 
 export default connect(

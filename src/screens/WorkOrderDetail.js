@@ -31,29 +31,30 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
 
-const Profile = props => {
+const WorkOrderDetail = props => {
   const {navigation, onSetUserInfo, userInfo, workOrderInfo, onSetWorkOrder} =
     props;
   const [init, setInit] = useState(false);
-  const [profileDetail, setProfileDetail] = useState([]);
+  const [workOrderDetails, setWorkOrderDetail] = useState([]);
 
-  async function getProfileDetail() {
-    let id = userInfo.id;
+  async function getWorkOrder() {
+    let id = workOrderInfo.id;
     console.log('work order id get from redux: ', id);
     let url;
-    url = `api/profile/${id}`;
+    url = `api/workOrder/detail/${id}`;
     try {
       const response = await get(url);
       const json = await response;
       console.log('json: ', json);
-      setProfileDetail(json.data);
-      console.log('profile detail: ', profileDetail);
+      setWorkOrderDetail(json.data);
+      console.log('work order: ', workOrderDetails);
     } catch (error) {
       console.log(error);
     }
   }
+
   useEffect(() => {
-    getProfileDetail();
+    getWorkOrder();
     setInit(true);
   }, [init]);
 
@@ -96,50 +97,73 @@ const Profile = props => {
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.container}>
-        <Text style={styles.head}>Profile</Text>
-        {profileDetail.map(item => (
+        <Text style={styles.head}>Work Order</Text>
+        {workOrderDetails.map(item => (
           <DataTable>
             <DataTable.Row>
               <DataTable.Cell>
-                <Text>Name</Text>
+                <Text>Maintenance Name</Text>
               </DataTable.Cell>
               <DataTable.Cell>
-                <Text>{item.name}</Text>
-              </DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-              <DataTable.Cell>
-                <Text>IC Number</Text>
-              </DataTable.Cell>
-              <DataTable.Cell>
-                <Text>{item.ic_number}</Text>
+                <Text>{item.item_code}</Text>
               </DataTable.Cell>
             </DataTable.Row>
             <DataTable.Row>
               <DataTable.Cell>
-                <Text>Contact Number</Text>
+                <Text>Maintenance Date</Text>
               </DataTable.Cell>
               <DataTable.Cell>
-                <Text>{item.contact_number}</Text>
-              </DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-              <DataTable.Cell>
-                <Text>Address</Text>
-              </DataTable.Cell>
-            </DataTable.Row>
-
-            <DataTable.Row>
-              <DataTable.Cell>
-                <Text>{item.address}</Text>
+                <Text>
+                  {Moment(item.maintenance_date).add(1, 'day').format('L')}
+                </Text>
               </DataTable.Cell>
             </DataTable.Row>
             <DataTable.Row>
               <DataTable.Cell>
-                <Text>Email</Text>
+                <Text>Maintenance Time</Text>
               </DataTable.Cell>
               <DataTable.Cell>
-                <Text>{item.email}</Text>
+                <Text>{item.maintenance_time}</Text>
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>
+                <Text>Status</Text>
+              </DataTable.Cell>
+              <DataTable.Cell>
+                <Text>{item.status}</Text>
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>
+                <Text>Technician Name</Text>
+              </DataTable.Cell>
+              <DataTable.Cell>
+                <Text>{item.technician_name}</Text>
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>
+                <Text>Technician Contact</Text>
+              </DataTable.Cell>
+              <DataTable.Cell>
+                <Text>{item.technician_contact}</Text>
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>
+                <Text>Item Code</Text>
+              </DataTable.Cell>
+              <DataTable.Cell>
+                <Text>{item.item_code}</Text>
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>
+                <Text>Item Name</Text>
+              </DataTable.Cell>
+              <DataTable.Cell>
+                <Text>{item.item_name}</Text>
               </DataTable.Cell>
             </DataTable.Row>
           </DataTable>
@@ -148,7 +172,6 @@ const Profile = props => {
     </>
   );
 };
-
 const styles = StyleSheet.create({
   nav: {
     flexDirection: 'row',
@@ -197,7 +220,7 @@ const styles = StyleSheet.create({
   },
 });
 
-Profile.propTypes = {
+WorkOrderDetail.propTypes = {
   navigation: PropTypes.object,
   onSetUserInfo: PropTypes.func,
   onSetWorkOrder: PropTypes.func,
@@ -218,4 +241,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(withTranslation()(Profile));
+)(withTranslation()(WorkOrderDetail));
