@@ -33,13 +33,15 @@ import {setUserInfo, setWorkOrderId} from '../redux/actions';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
+import DatePicker from 'react-native-date-picker';
 
 const UpdateWorkOrder = props => {
   const {navigation, onSetUserInfo, userInfo, workOrderInfo, onSetWorkOrder} =
     props;
   const [init, setInit] = useState(false);
   const [status, setStatus] = useState('');
-  const [date, setDate] = useState('');
+  const [datePicker, setDatePicker] = useState(false);
+  const [date, setDate] = useState(new Date());
   const [time, setTime] = useState('');
 
   async function getUpdateWorkOrderRequest(inputDate, inputTime, inputStatus) {
@@ -99,40 +101,48 @@ const UpdateWorkOrder = props => {
           <Text>Profile</Text>
         </TouchableOpacity>
       </View>
-      <ScrollView style={styles.container}>
-        <Text style={styles.head}>Edit</Text>
-        <Text>Date: </Text>
-        <TextInput
-          style={styles.textInput}
-          autoCapitalize="none"
-          autoCorrect={false}
-          placeholder="Date"
-          value={date}
-          onChangeText={newValue => setDate(newValue)}
-        />
-        <Text>Time: </Text>
-        <TextInput
-          style={styles.textInput}
-          autoCapitalize="none"
-          autoCorrect={false}
-          placeholder="Time"
-          value={time}
-          onChangeText={newValue => setTime(newValue)}
-        />
-        <Text>Status: </Text>
-        <TextInput
-          style={styles.textInput}
-          autoCapitalize="none"
-          autoCorrect={false}
-          placeholder="IC"
-          value={status}
-          onChangeText={newValue => setStatus(newValue)}
-        />
-        <Button
-          title="Submit"
-          onPress={newValue => getUpdateWorkOrderRequest(date, time, status)}
-        />
-      </ScrollView>
+      <SafeAreaView style={{flex: 1}}>
+        <ScrollView style={styles.container}>
+          <Text style={styles.head}>Edit</Text>
+          <Text>Date: {date.toDateString()}</Text>
+          <Button title="Choose Date" onPress={() => setDatePicker(true)} />
+          <DatePicker
+            modal
+            open={datePicker}
+            date={date}
+            mode="date"
+            onConfirm={date => {
+              setDatePicker(false);
+              setDate(date);
+            }}
+            onCancel={() => {
+              setDatePicker(false);
+            }}
+          />
+          <Text>Time: </Text>
+          <TextInput
+            style={styles.textInput}
+            autoCapitalize="none"
+            autoCorrect={false}
+            placeholder="Time"
+            value={time}
+            onChangeText={newValue => setTime(newValue)}
+          />
+          <Text>Status: </Text>
+          <TextInput
+            style={styles.textInput}
+            autoCapitalize="none"
+            autoCorrect={false}
+            placeholder="IC"
+            value={status}
+            onChangeText={newValue => setStatus(newValue)}
+          />
+          <Button
+            title="Submit"
+            onPress={newValue => getUpdateWorkOrderRequest(date, time, status)}
+          />
+        </ScrollView>
+      </SafeAreaView>
     </>
   );
 };
@@ -182,6 +192,13 @@ const styles = StyleSheet.create({
     top: 5,
     paddingVertical: 5,
     marginBottom: 1,
+  },
+  datePicker: {
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    width: 320,
+    height: 260,
+    display: 'flex',
   },
 });
 
