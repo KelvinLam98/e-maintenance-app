@@ -47,7 +47,6 @@ const UpdateWorkOrder = props => {
   const [selectedLanguage, setSelectedLanguage] = useState();
 
   async function getUpdateWorkOrderRequest(inputDate, inputTime, inputStatus) {
-    console.log(inputDate, inputTime, inputStatus);
     let id = workOrderInfo.id;
     try {
       const response = await post(`api/workOrder/detail/edit/${id}`, {
