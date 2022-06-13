@@ -111,7 +111,7 @@ const WorkOrderHistory = props => {
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.container}>
-        <Text style={styles.head}>Work Order: TODO</Text>
+        <Text style={styles.head}>Work Order: History</Text>
         <Searchbar
           placeholder="Search"
           onChangeText={onChangeSearch}
@@ -119,10 +119,10 @@ const WorkOrderHistory = props => {
         />
         <DataTable>
           <DataTable.Header style={styles.table}>
-            <DataTable.Title style={{flex: 2}}>
+            <DataTable.Title>
               <Text style={styles.title}>Date</Text>
             </DataTable.Title>
-            <DataTable.Title style={{flex: 2}}>
+            <DataTable.Title>
               <Text style={styles.title}>Code</Text>
             </DataTable.Title>
             <DataTable.Title>
@@ -136,12 +136,10 @@ const WorkOrderHistory = props => {
                 onPress={() => {
                   getWorkOrderById(item.id);
                 }}>
-                <DataTable.Cell style={{flex: 2}}>
+                <DataTable.Cell>
                   {Moment(item.maintenance_date).add(1, 'day').format('L')}
                 </DataTable.Cell>
-                <DataTable.Cell style={{flex: 2}}>
-                  {item.item_code}
-                </DataTable.Cell>
+                <DataTable.Cell>{item.item_code}</DataTable.Cell>
                 <DataTable.Cell>{item.status}</DataTable.Cell>
               </DataTable.Row>
             </>
@@ -156,7 +154,10 @@ const styles = StyleSheet.create({
   nav: {
     flexDirection: 'row',
     width: '100%',
-    backgroundColor: 'white',
+    backgroundColor: 'azure',
+    borderColor: 'beige',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
   },
   button: {
     width: '33.33%',
@@ -164,22 +165,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 1,
     elevation: 20,
-    backgroundColor: 'white',
+    backgroundColor: 'azure',
     paddingVertical: 10,
     paddingHorizontal: 12,
   },
+  editButton: {
+    padding: 10,
+    backgroundColor: 'royalblue',
+  },
   container: {
     flex: 1,
-    paddingTop: 30,
+    paddingVertical: 15,
     paddingHorizontal: 30,
-    backgroundColor: 'lightgrey',
-  },
-  table: {
-    flexDirection: 'row',
-    width: '100%',
-    borderBottomColor: 'black',
-    borderBottomWidth: 1,
-    textAlign: 'left',
+    backgroundColor: 'azure',
   },
   head: {
     fontSize: 25,
@@ -188,10 +186,7 @@ const styles = StyleSheet.create({
     padding: 5,
     paddingBottom: 10,
     marginTop: -10,
-  },
-  title: {
-    fontSize: 18,
-    color: 'black',
+    backgroundColor: 'azure',
   },
   buttonIcon: {
     position: 'absolute',
@@ -199,6 +194,26 @@ const styles = StyleSheet.create({
     top: 5,
     paddingVertical: 5,
     marginBottom: 1,
+  },
+  card: {
+    backgroundColor: 'beige',
+    padding: 20,
+  },
+  listRow: {
+    paddingBottom: 10,
+    paddingTop: 10,
+    borderBottomColor: 'lightgrey',
+    borderBottomWidth: 1,
+  },
+  textStyle: {
+    fontSize: 15,
+    color: 'black',
+    textAlign: 'left',
+  },
+  textStyleBtn: {
+    fontSize: 15,
+    color: 'white',
+    textAlign: 'left',
   },
 });
 

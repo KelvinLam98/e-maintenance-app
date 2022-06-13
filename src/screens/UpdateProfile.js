@@ -20,6 +20,9 @@ import {
   FlatList,
   Table,
   ScrollView,
+  TextInput,
+  Button,
+  Alert,
 } from 'react-native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -31,30 +34,40 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
 
-const WorkOrderDetail = props => {
+const UpdateProfile = props => {
   const {navigation, onSetUserInfo, userInfo, workOrderInfo, onSetWorkOrder} =
     props;
   const [init, setInit] = useState(false);
-  const [workOrderDetails, setWorkOrderDetail] = useState([]);
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [icNumber, setIcNumber] = useState('');
+  const [contactNumber, setContactNumber] = useState('');
+  const [address, setAddress] = useState('');
 
-  async function getWorkOrder() {
-    let id = workOrderInfo.id;
-    console.log('work order id get from redux: ', id);
-    let url;
-    url = `api/workOrder/detail/${id}`;
+  async function getUpdateProfileRequest(
+    inputName,
+    inputEmail,
+    inputIcNumber,
+    inputContactNumber,
+    inputAddress,
+  ) {
+    let id = userInfo.id;
     try {
-      const response = await get(url);
-      const json = await response;
-      console.log('json: ', json);
-      setWorkOrderDetail(json.data);
-      console.log('work order: ', workOrderDetails);
+      const response = await post(`api/profile/edit/${id}`, {
+        name: inputName,
+        ic_number: inputIcNumber,
+        contact_number: inputContactNumber,
+        address: inputAddress,
+        email: inputEmail,
+      });
+      Alert.alert(response);
+      navigation.navigate('Profile');
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
   useEffect(() => {
-    getWorkOrder();
     setInit(true);
   }, [init]);
 
@@ -97,50 +110,77 @@ const WorkOrderDetail = props => {
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.container}>
-        <Text style={{fontSize: 25, color: 'black'}}>
-          Work Order {'  '}
-          <TouchableOpacity
-            style={styles.editButton}
-            onPress={() => navigation.navigate('UpdateWorkOrder')}>
-            <Text style={styles.textStyleBtn}>Edit</Text>
-          </TouchableOpacity>
-        </Text>
-        {workOrderDetails.map(item => (
-          <>
-            <View style={styles.card}>
-              <View style={styles.listRow}>
-                <Text style={styles.textStyle}>Maintenance Code: </Text>
-                <Text style={styles.textStyle}>{item.item_code}</Text>
-              </View>
-              <View style={styles.listRow}>
-                <Text style={styles.textStyle}>Maintenance Name: </Text>
-                <Text style={styles.textStyle}>{item.item_name}</Text>
-              </View>
-              <View style={styles.listRow}>
-                <Text style={styles.textStyle}>Maintenance Date: </Text>
-                <Text style={styles.textStyle}>
-                  {Moment(item.maintenance_date).add(1, 'day').format('L')}
-                </Text>
-              </View>
-              <View style={styles.listRow}>
-                <Text style={styles.textStyle}>Maintenance Time: </Text>
-                <Text style={styles.textStyle}>{item.maintenance_time}</Text>
-              </View>
-              <View style={styles.listRow}>
-                <Text style={styles.textStyle}>Technician Name: </Text>
-                <Text style={styles.textStyle}>{item.technician_name}</Text>
-              </View>
-              <View style={styles.listRow}>
-                <Text style={styles.textStyle}>Technician Contact: </Text>
-                <Text style={styles.textStyle}>{item.technician_contact}</Text>
-              </View>
-              <View style={styles.listRow}>
-                <Text style={styles.textStyle}>Status: </Text>
-                <Text style={styles.textStyle}>{item.status}</Text>
-              </View>
-            </View>
-          </>
-        ))}
+        <Text style={styles.head}>Edit</Text>
+        <View style={styles.card}>
+          <View style={styles.listRow}>
+            <Text style={styles.textStyle}>Name: </Text>
+            <TextInput
+              style={styles.textInput}
+              autoCapitalize="none"
+              autoCorrect={false}
+              placeholder="Name"
+              value={name}
+              onChangeText={newValue => setName(newValue)}
+            />
+          </View>
+          <View style={styles.listRow}>
+            <Text style={styles.textStyle}>Email: </Text>
+            <TextInput
+              style={styles.textInput}
+              autoCapitalize="none"
+              autoCorrect={false}
+              placeholder="Email"
+              value={email}
+              onChangeText={newValue => setEmail(newValue)}
+            />
+          </View>
+          <View style={styles.listRow}>
+            <Text style={styles.textStyle}>IC: </Text>
+            <TextInput
+              style={styles.textInput}
+              autoCapitalize="none"
+              autoCorrect={false}
+              placeholder="IC"
+              value={icNumber}
+              onChangeText={newValue => setIcNumber(newValue)}
+            />
+          </View>
+          <View style={styles.listRow}>
+            <Text style={styles.textStyle}>Contact Number: </Text>
+            <TextInput
+              style={styles.textInput}
+              autoCapitalize="none"
+              autoCorrect={false}
+              placeholder="Contact Number"
+              value={contactNumber}
+              onChangeText={newValue => setContactNumber(newValue)}
+            />
+          </View>
+          <View style={styles.listRow}>
+            <Text style={styles.textStyle}>Address: </Text>
+            <TextInput
+              style={styles.textInput}
+              autoCapitalize="none"
+              autoCorrect={false}
+              placeholder="Address"
+              value={address}
+              onChangeText={newValue => setAddress(newValue)}
+            />
+          </View>
+          <Button
+            title="Submit"
+            color="royalblue"
+            onPress={newValue =>
+              getUpdateProfileRequest(
+                name,
+                email,
+                icNumber,
+                contactNumber,
+                address,
+              )
+            }
+          />
+        </View>
       </ScrollView>
     </>
   );
@@ -166,8 +206,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   editButton: {
+    borderColor: 'lightgrey',
+    borderWidth: 1,
     padding: 10,
-    backgroundColor: 'royalblue',
+    backgroundColor: 'lightgrey',
   },
   container: {
     flex: 1,
@@ -196,24 +238,19 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   listRow: {
-    paddingBottom: 10,
-    paddingTop: 10,
+    padding: 10,
     borderBottomColor: 'lightgrey',
     borderBottomWidth: 1,
+    margin: 10,
   },
   textStyle: {
     fontSize: 15,
     color: 'black',
     textAlign: 'left',
   },
-  textStyleBtn: {
-    fontSize: 15,
-    color: 'white',
-    textAlign: 'left',
-  },
 });
 
-WorkOrderDetail.propTypes = {
+UpdateProfile.propTypes = {
   navigation: PropTypes.object,
   onSetUserInfo: PropTypes.func,
   onSetWorkOrder: PropTypes.func,
@@ -234,4 +271,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(withTranslation()(WorkOrderDetail));
+)(withTranslation()(UpdateProfile));

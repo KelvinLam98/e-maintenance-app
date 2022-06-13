@@ -24,7 +24,7 @@ import {
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {get, post, resource} from '../common/ServerApi';
-import {DataTable} from 'react-native-paper';
+import {DataTable, numberOfLines} from 'react-native-paper';
 import Moment from 'moment';
 import {setUserInfo, setWorkOrderId} from '../redux/actions';
 import PropTypes from 'prop-types';
@@ -82,67 +82,53 @@ const Profile = props => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('MainPage')}>
-          <Text>Work Order</Text>
+          <Text style={styles.textStyle}>Work Order</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('WorkOrderHistory')}>
-          <Text>History</Text>
+          <Text style={styles.textStyle}>History</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('Profile')}>
-          <Text>Profile</Text>
+          <Text style={styles.textStyle}>Profile</Text>
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.container}>
-        <Text style={styles.head}>Profile</Text>
+        <Text style={styles.head}>
+          Profile {'  '}
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => navigation.navigate('UpdateProfile')}>
+            <Text style={styles.textStyleBtn}>Edit</Text>
+          </TouchableOpacity>
+        </Text>
         {profileDetail.map(item => (
-          <DataTable>
-            <DataTable.Row>
-              <DataTable.Cell>
-                <Text>Name</Text>
-              </DataTable.Cell>
-              <DataTable.Cell>
-                <Text>{item.name}</Text>
-              </DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-              <DataTable.Cell>
-                <Text>IC Number</Text>
-              </DataTable.Cell>
-              <DataTable.Cell>
-                <Text>{item.ic_number}</Text>
-              </DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-              <DataTable.Cell>
-                <Text>Contact Number</Text>
-              </DataTable.Cell>
-              <DataTable.Cell>
-                <Text>{item.contact_number}</Text>
-              </DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-              <DataTable.Cell>
-                <Text>Address</Text>
-              </DataTable.Cell>
-            </DataTable.Row>
-
-            <DataTable.Row>
-              <DataTable.Cell>
-                <Text>{item.address}</Text>
-              </DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-              <DataTable.Cell>
-                <Text>Email</Text>
-              </DataTable.Cell>
-              <DataTable.Cell>
-                <Text>{item.email}</Text>
-              </DataTable.Cell>
-            </DataTable.Row>
-          </DataTable>
+          <>
+            <View style={styles.card}>
+              <View style={styles.listRow}>
+                <Text style={styles.textStyle}>Name: </Text>
+                <Text style={styles.textStyle}>{item.name}</Text>
+              </View>
+              <View style={styles.listRow}>
+                <Text style={styles.textStyle}>IC Number: </Text>
+                <Text style={styles.textStyle}>{item.ic_number}</Text>
+              </View>
+              <View style={styles.listRow}>
+                <Text style={styles.textStyle}>Contact Number: </Text>
+                <Text style={styles.textStyle}>{item.contact_number}</Text>
+              </View>
+              <View style={styles.listRow}>
+                <Text style={styles.textStyle}>Email: </Text>
+                <Text style={styles.textStyle}>{item.email}</Text>
+              </View>
+              <View style={styles.listRow}>
+                <Text style={styles.textStyle}>Address: </Text>
+                <Text style={styles.textStyle}>{item.address}</Text>
+              </View>
+            </View>
+          </>
         ))}
       </ScrollView>
     </>
@@ -153,7 +139,10 @@ const styles = StyleSheet.create({
   nav: {
     flexDirection: 'row',
     width: '100%',
-    backgroundColor: 'white',
+    backgroundColor: 'azure',
+    borderColor: 'beige',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
   },
   button: {
     width: '33.33%',
@@ -161,24 +150,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 1,
     elevation: 20,
-    backgroundColor: 'white',
+    backgroundColor: 'azure',
     paddingVertical: 10,
     paddingHorizontal: 12,
   },
+  editButton: {
+    padding: 10,
+    backgroundColor: 'royalblue',
+  },
   container: {
     flex: 1,
-    paddingTop: 30,
+    paddingVertical: 15,
     paddingHorizontal: 30,
-    backgroundColor: 'lightgrey',
-  },
-  header: {
-    flexDirection: 'row',
-    width: '100%',
-    borderBottomColor: 'black',
-    borderBottomWidth: 1,
-    fontSize: 10,
-    color: 'black',
-    textAlign: 'left',
+    backgroundColor: 'azure',
   },
   head: {
     fontSize: 25,
@@ -187,6 +171,7 @@ const styles = StyleSheet.create({
     padding: 5,
     paddingBottom: 10,
     marginTop: -10,
+    backgroundColor: 'azure',
   },
   buttonIcon: {
     position: 'absolute',
@@ -194,6 +179,26 @@ const styles = StyleSheet.create({
     top: 5,
     paddingVertical: 5,
     marginBottom: 1,
+  },
+  card: {
+    backgroundColor: 'beige',
+    padding: 20,
+  },
+  listRow: {
+    paddingBottom: 10,
+    paddingTop: 10,
+    borderBottomColor: 'lightgrey',
+    borderBottomWidth: 1,
+  },
+  textStyle: {
+    fontSize: 15,
+    color: 'black',
+    textAlign: 'left',
+  },
+  textStyleBtn: {
+    fontSize: 15,
+    color: 'white',
+    textAlign: 'left',
   },
 });
 
