@@ -20,40 +20,54 @@ import {
   FlatList,
   Table,
   ScrollView,
+  TextInput,
+  Button,
+  Alert,
 } from 'react-native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {get, post, resource} from '../common/ServerApi';
-import {DataTable, numberOfLines} from 'react-native-paper';
+import {DataTable} from 'react-native-paper';
 import Moment from 'moment';
 import {setUserInfo, setWorkOrderId} from '../redux/actions';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
 
-const Profile = props => {
+const UpdateProfile = props => {
   const {navigation, onSetUserInfo, userInfo, workOrderInfo, onSetWorkOrder} =
     props;
   const [init, setInit] = useState(false);
-  const [profileDetail, setProfileDetail] = useState([]);
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [icNumber, setIcNumber] = useState('');
+  const [contactNumber, setContactNumber] = useState('');
+  const [address, setAddress] = useState('');
 
-  async function getProfileDetail() {
+  async function getUpdateProfileRequest(
+    inputName,
+    inputEmail,
+    inputIcNumber,
+    inputContactNumber,
+    inputAddress,
+  ) {
     let id = userInfo.id;
-    console.log('work order id get from redux: ', id);
-    let url;
-    url = `api/profile/${id}`;
     try {
-      const response = await get(url);
-      const json = await response;
-      console.log('json: ', json);
-      setProfileDetail(json.data);
-      console.log('profile detail: ', profileDetail);
+      const response = await post(`api/profile/edit/${id}`, {
+        name: inputName,
+        ic_number: inputIcNumber,
+        contact_number: inputContactNumber,
+        address: inputAddress,
+        email: inputEmail,
+      });
+      Alert.alert(response);
+      navigation.navigate('Profile');
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
+
   useEffect(() => {
-    getProfileDetail();
     setInit(true);
   }, [init]);
 
@@ -96,37 +110,64 @@ const Profile = props => {
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.container}>
-        <Text style={styles.head}>
-          Profile {'  '}
-          <TouchableOpacity
-            onPress={() => navigation.navigate('UpdateProfile')}>
-            <Text>Edit</Text>
-          </TouchableOpacity>
-        </Text>
-        {profileDetail.map(item => (
-          <>
-            <View>
-              <Text style={styles.firstRow}>Name: </Text>
-              <Text>{item.name}</Text>
-            </View>
-            <View>
-              <Text style={styles.firstRow}>IC Number: </Text>
-              <Text>{item.ic_number}</Text>
-            </View>
-            <View>
-              <Text style={styles.firstRow}>Contact Number: </Text>
-              <Text>{item.contact_number}</Text>
-            </View>
-            <View>
-              <Text style={styles.firstRow}>Email: </Text>
-              <Text>{item.email}</Text>
-            </View>
-            <View>
-              <Text style={styles.firstRow}>Address: </Text>
-              <Text>{item.address}</Text>
-            </View>
-          </>
-        ))}
+        <Text style={styles.head}>Edit</Text>
+        <Text>Name: </Text>
+        <TextInput
+          style={styles.textInput}
+          autoCapitalize="none"
+          autoCorrect={false}
+          placeholder="Name"
+          value={name}
+          onChangeText={newValue => setName(newValue)}
+        />
+        <Text>Email: </Text>
+        <TextInput
+          style={styles.textInput}
+          autoCapitalize="none"
+          autoCorrect={false}
+          placeholder="Email"
+          value={email}
+          onChangeText={newValue => setEmail(newValue)}
+        />
+        <Text>IC: </Text>
+        <TextInput
+          style={styles.textInput}
+          autoCapitalize="none"
+          autoCorrect={false}
+          placeholder="IC"
+          value={icNumber}
+          onChangeText={newValue => setIcNumber(newValue)}
+        />
+        <Text>Contact Number: </Text>
+        <TextInput
+          style={styles.textInput}
+          autoCapitalize="none"
+          autoCorrect={false}
+          placeholder="Contact Number"
+          value={contactNumber}
+          onChangeText={newValue => setContactNumber(newValue)}
+        />
+        <Text>Address: </Text>
+        <TextInput
+          style={styles.textInput}
+          autoCapitalize="none"
+          autoCorrect={false}
+          placeholder="Address"
+          value={address}
+          onChangeText={newValue => setAddress(newValue)}
+        />
+        <Button
+          title="Submit"
+          onPress={newValue =>
+            getUpdateProfileRequest(
+              name,
+              email,
+              icNumber,
+              contactNumber,
+              address,
+            )
+          }
+        />
       </ScrollView>
     </>
   );
@@ -178,12 +219,9 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     marginBottom: 1,
   },
-  firstRow: {
-    width: 75,
-  },
 });
 
-Profile.propTypes = {
+UpdateProfile.propTypes = {
   navigation: PropTypes.object,
   onSetUserInfo: PropTypes.func,
   onSetWorkOrder: PropTypes.func,
@@ -204,4 +242,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(withTranslation()(Profile));
+)(withTranslation()(UpdateProfile));

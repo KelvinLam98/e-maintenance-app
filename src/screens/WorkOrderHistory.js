@@ -119,10 +119,10 @@ const WorkOrderHistory = props => {
         />
         <DataTable>
           <DataTable.Header style={styles.table}>
-            <DataTable.Title style={{flex: 2}}>
+            <DataTable.Title>
               <Text style={styles.title}>Date</Text>
             </DataTable.Title>
-            <DataTable.Title style={{flex: 2}}>
+            <DataTable.Title>
               <Text style={styles.title}>Code</Text>
             </DataTable.Title>
             <DataTable.Title>
@@ -136,12 +136,10 @@ const WorkOrderHistory = props => {
                 onPress={() => {
                   getWorkOrderById(item.id);
                 }}>
-                <DataTable.Cell style={{flex: 2}}>
+                <DataTable.Cell>
                   {Moment(item.maintenance_date).add(1, 'day').format('L')}
                 </DataTable.Cell>
-                <DataTable.Cell style={{flex: 2}}>
-                  {item.item_code}
-                </DataTable.Cell>
+                <DataTable.Cell>{item.item_code}</DataTable.Cell>
                 <DataTable.Cell>{item.status}</DataTable.Cell>
               </DataTable.Row>
             </>
