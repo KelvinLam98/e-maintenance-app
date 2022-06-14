@@ -40,14 +40,11 @@ const Login = props => {
           token: response.jwtToken,
           readOnlyToken: response.readOnlyJwtToken,
         };
-        console.log('login: ', login);
-        console.log('initial state: ', stores.getState().app);
         onSetUserInfo(login);
         const state = stores.getState().app;
-        console.log('login success state: ', state);
         navigation.navigate('MainPage');
       } else {
-        Alert.alert('Cannot login');
+        Alert.alert('Wrong email or password');
       }
     } catch (error) {
       console.error(error);
