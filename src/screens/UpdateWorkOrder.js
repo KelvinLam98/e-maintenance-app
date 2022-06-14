@@ -40,11 +40,10 @@ const UpdateWorkOrder = props => {
   const {navigation, onSetUserInfo, userInfo, workOrderInfo, onSetWorkOrder} =
     props;
   const [init, setInit] = useState(false);
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState('Created');
   const [datePicker, setDatePicker] = useState(false);
   const [date, setDate] = useState(new Date());
-  const [time, setTime] = useState('');
-  const [selectedLanguage, setSelectedLanguage] = useState();
+  const [time, setTime] = useState('09:00');
 
   async function getUpdateWorkOrderRequest(inputDate, inputTime, inputStatus) {
     let id = workOrderInfo.id;

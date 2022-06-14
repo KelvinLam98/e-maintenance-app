@@ -56,7 +56,7 @@ const Login = props => {
 
   return (
     <>
-      <ScrollView>
+      <ScrollView style={styles.container}>
         <View>
           <Image
             // eslint-disable-next-line react-native/no-inline-styles
@@ -70,28 +70,32 @@ const Login = props => {
             source={require('../logo2.png')}
           />
           <Text style={styles.head}>E-Maintenance App</Text>
-
-          <Text>Email: </Text>
-          <TextInput
-            style={styles.textInput}
-            autoCapitalize="none"
-            autoCorrect={false}
-            placeholder="Email"
-            value={email}
-            onChangeText={newValue => setEmail(newValue)}
-          />
-          <Text>Password: </Text>
-          <TextInput
-            style={styles.textInput}
-            autoCapitalize="none"
-            autoCorrect={false}
-            secureTextEntry={true}
-            placeholder="Password"
-            value={password}
-            onChangeText={newValue => setPassword(newValue)}
-          />
+          <View style={styles.listRow}>
+            <Text style={styles.textStyle}>Email: </Text>
+            <TextInput
+              style={styles.textInput}
+              autoCapitalize="none"
+              autoCorrect={false}
+              placeholder="Email"
+              value={email}
+              onChangeText={newValue => setEmail(newValue)}
+            />
+          </View>
+          <View style={styles.listRow}>
+            <Text style={styles.textStyle}>Password: </Text>
+            <TextInput
+              style={styles.textInput}
+              autoCapitalize="none"
+              autoCorrect={false}
+              secureTextEntry={true}
+              placeholder="Password"
+              value={password}
+              onChangeText={newValue => setPassword(newValue)}
+            />
+          </View>
           <Button
             title="Submit"
+            color="royalblue"
             onPress={newValue => getLoginRequest(email, password)}
           />
         </View>
@@ -101,10 +105,25 @@ const Login = props => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    backgroundColor: 'azure',
+  },
+  listRow: {
+    paddingBottom: 10,
+    paddingTop: 10,
+  },
   textInput: {
     margin: 15,
     borderColor: 'black',
     borderWidth: 1,
+  },
+  textStyle: {
+    fontSize: 15,
+    color: 'black',
+    textAlign: 'left',
   },
   head: {
     fontSize: 25,
