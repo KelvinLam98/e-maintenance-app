@@ -137,7 +137,7 @@ const WorkOrderHistory = props => {
                   getWorkOrderById(item.id);
                 }}>
                 <DataTable.Cell>
-                  {Moment(item.maintenance_date).add(1, 'day').format('L')}
+                  {Moment(item.maintenance_date).format('L')}
                 </DataTable.Cell>
                 <DataTable.Cell>{item.item_code}</DataTable.Cell>
                 <DataTable.Cell>{item.status}</DataTable.Cell>
