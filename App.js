@@ -17,6 +17,7 @@ import WorkOrderHistory from './src/screens/WorkOrderHistory';
 import WorkOrderDetail from './src/screens/WorkOrderDetail';
 import UpdateProfile from './src/screens/UpdateProfile';
 import UpdateWorkOrder from './src/screens/UpdateWorkOrder';
+import ChangeUserPassword from './src/screens/ChangeUserPassword';
 import {Provider} from 'react-redux';
 import stores from './src/redux/stores';
 
@@ -33,6 +34,10 @@ const App = () => {
           <Stack.Screen name="MainPage" component={MainPage} />
           <Stack.Screen name="Profile" component={Profile} />
           <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
+          <Stack.Screen
+            name="ChangeUserPassword"
+            component={ChangeUserPassword}
+          />
           <Stack.Screen name="WorkOrderHistory" component={WorkOrderHistory} />
           <Stack.Screen name="WorkOrderDetail" component={WorkOrderDetail} />
           <Stack.Screen name="UpdateWorkOrder" component={UpdateWorkOrder} />
