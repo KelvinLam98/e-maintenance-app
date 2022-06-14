@@ -87,7 +87,7 @@ const MainPage = props => {
       return () => {
         isActive = false;
       };
-    }),
+    }, []),
   );
 
   return (
@@ -115,17 +115,17 @@ const MainPage = props => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('MainPage')}>
-          <Text>Work Order</Text>
+          <Text style={styles.textStyle}>Work Order</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('WorkOrderHistory')}>
-          <Text>History</Text>
+          <Text style={styles.textStyle}>History</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('Profile')}>
-          <Text>Profile</Text>
+          <Text style={styles.textStyle}>Profile</Text>
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.container}>

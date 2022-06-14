@@ -8,7 +8,7 @@
  * @flow strict-local
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 //import type {Node} from 'react';
 import {
   SafeAreaView,
@@ -19,9 +19,10 @@ import {
   Image,
   FlatList,
   Table,
+  RefreshControl,
   ScrollView,
 } from 'react-native';
-
+import {useFocusEffect} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {get, post, resource} from '../common/ServerApi';
 import {DataTable} from 'react-native-paper';
@@ -31,11 +32,16 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
 
+const wait = timeout => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
+
 const WorkOrderDetail = props => {
   const {navigation, onSetUserInfo, userInfo, workOrderInfo, onSetWorkOrder} =
     props;
   const [init, setInit] = useState(false);
   const [workOrderDetails, setWorkOrderDetail] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   async function getWorkOrder() {
     let id = workOrderInfo.id;
@@ -57,6 +63,16 @@ const WorkOrderDetail = props => {
     getWorkOrder();
     setInit(true);
   }, [init]);
+
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
+      getWorkOrder();
+      return () => {
+        isActive = false;
+      };
+    }, []),
+  );
 
   return (
     <>
@@ -119,7 +135,7 @@ const WorkOrderDetail = props => {
               <View style={styles.listRow}>
                 <Text style={styles.textStyle}>Maintenance Date: </Text>
                 <Text style={styles.textStyle}>
-                  {Moment(item.maintenance_date).add(1, 'day').format('L')}
+                  {Moment(item.maintenance_date).format('L')}
                 </Text>
               </View>
               <View style={styles.listRow}>

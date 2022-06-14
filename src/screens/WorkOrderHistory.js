@@ -8,7 +8,7 @@
  * @flow strict-local
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 //import type {Node} from 'react';
 import {
   SafeAreaView,
@@ -21,8 +21,10 @@ import {
   Table,
   ScrollView,
   Alert,
+  RefreshControl,
 } from 'react-native';
 
+import {useFocusEffect} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {get, post, resource} from '../common/ServerApi';
 import {DataTable, Searchbar} from 'react-native-paper';
@@ -32,12 +34,17 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
 
+const wait = timeout => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
+
 const WorkOrderHistory = props => {
   const {navigation, onSetUserInfo, userInfo, workOrderInfo, onSetWorkOrder} =
     props;
   const [init, setInit] = useState(false);
   const [workOrder, setWorkOrder] = useState([]);
   const [searchQuery, setSearchQuery] = React.useState('');
+  const [refreshing, setRefreshing] = useState(false);
 
   const onChangeSearch = query => setSearchQuery(query);
 
@@ -72,6 +79,16 @@ const WorkOrderHistory = props => {
     setInit(true);
   }, [searchQuery, init]);
 
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
+      getWorkOrder();
+      return () => {
+        isActive = false;
+      };
+    }, []),
+  );
+
   return (
     <>
       <View>
@@ -97,17 +114,17 @@ const WorkOrderHistory = props => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('MainPage')}>
-          <Text>Work Order</Text>
+          <Text style={styles.textStyle}>Work Order</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('WorkOrderHistory')}>
-          <Text>History</Text>
+          <Text style={styles.textStyle}>History</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('Profile')}>
-          <Text>Profile</Text>
+          <Text style={styles.textStyle}>Profile</Text>
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.container}>
