@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "638443305888",
+    "project_id": "emaintenanceapp-52fc8",
+    "storage_bucket": "emaintenanceapp-52fc8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:638443305888:android:ea1fbc1ee3838ab99182c5",
+        "android_client_info": {
+          "package_name": "com.emaintenanceapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "638443305888-u40gn1n3bfm6ethh5d7acld0s8kdgsop.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJ7T06RRSyqHXs_hbzRBdPk5KIpfZIGWg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "638443305888-u40gn1n3bfm6ethh5d7acld0s8kdgsop.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

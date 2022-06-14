@@ -16,6 +16,9 @@ import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
 import {setUserInfo} from '../redux/actions';
 import stores from '../redux/stores';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import PushNotification from 'react-native-push-notification';
+import Toast from 'react-native-toast-message';
 
 const Login = props => {
   const {navigation, onSetUserInfo} = props;
@@ -27,13 +30,19 @@ const Login = props => {
     setInit(true);
   }, [init]);
 
+  // async function registerPushToken(token) {
+  //   await post('api/users/register-firebase-token', token);
+  // }
+
   // eslint-disable-next-line no-shadow
   async function getLoginRequest(email, password) {
     try {
+      console.log("111111111111111111111111");
       const response = await post('api/login', {
         loginEmail: email,
         loginPassword: password,
       });
+      console.log("222222222222222222222222");
       if (response.loginIsAuthenticated === true) {
         const login = {
           ...response.user,
@@ -42,6 +51,59 @@ const Login = props => {
         };
         onSetUserInfo(login);
         const state = stores.getState().app;
+        // console.log('here=====');
+        // PushNotification.configure({
+        //   // (optional) Called when Token is generated (iOS and Android)
+        //   onRegister(token) {
+        //     // Call register token
+        //     registerPushToken(token);
+        //   },
+
+        //   // (required) Called when a remote is received or opened, or local notification is opened
+        //   onNotification(notification) {
+        //     //onSetWorkOrderId(notification.data.article_id);
+        //     // process the notification
+        //     if (notification.foreground) {
+        //       Toast.show({
+        //         text1: 'You have received a new notification.',
+        //         visibilityTime: 3000,
+        //         position: 'bottom',
+        //         type: 'success',
+        //         autoHide: true,
+        //       });
+        //     }
+
+        //     if (notification.userInteraction) {
+        //       navigation.navigate('WorkOrderDetail');
+        //     }
+        //     // (required) Called when a remote is received or opened, or local notification is opened
+        //     notification.finish(PushNotificationIOS.FetchResult.NoData);
+        //   },
+        //   // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
+        //   onRegistrationError(err) {
+        //     console.error(err.message, err);
+        //   },
+
+        //   // IOS ONLY (optional): default: all - Permissions to register.
+        //   permissions: {
+        //     alert: true,
+        //     badge: true,
+        //     sound: true,
+        //   },
+
+        //   // Should the initial notification be popped automatically
+        //   // default: true
+        //   popInitialNotification: true,
+
+        //   /**
+        //    * (optional) default: true
+        //    * - Specified if permissions (ios) and token (android and ios) will requested or not,
+        //    * - if not, you must call PushNotificationsHandler.requestPermissions() later
+        //    * - if you are not using remote notification or do not have Firebase installed, use this:
+        //    *     requestPermissions: Platform.OS === 'ios'
+        //    */
+        //   requestPermissions: true,
+        // });
         navigation.navigate('MainPage');
       } else {
         Alert.alert('Wrong email or password');
