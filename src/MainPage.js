@@ -51,7 +51,6 @@ const MainPage = props => {
 
   async function getWorkOrder() {
     let id = userInfo.id;
-    console.log('id get from redux: ', id);
     let url;
     if (searchQuery.length !== 0) {
       url = `api/workOrder/${id}?searchText=${searchQuery}`;
@@ -62,9 +61,8 @@ const MainPage = props => {
       const response = await get(url);
       const json = await response;
       setWorkOrder(json.data);
-      console.log(workOrder);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 

@@ -1,9 +1,12 @@
 const protocol = 'http';
 const serverHost = '192.168.0.141:9000';
 //const wsClient = new W3CWebSocket(`ws://${serverHost}/web-socket`);
+import stores from '../redux/stores';
 
 async function get(path, passedInToken) {
-  const jwtToken = null;
+  const jwtToken = stores.getState().app.userInfo.token
+    ? stores.getState().app.userInfo.token
+    : null;
   const response = await fetch(`${protocol}://${serverHost}/${path}`, {
     method: 'GET',
     headers: {
@@ -16,7 +19,9 @@ async function get(path, passedInToken) {
 }
 
 async function post(path, body) {
-  const jwtToken = null;
+  const jwtToken = stores.getState().app.userInfo.token
+    ? stores.getState().app.userInfo.token
+    : null;
   const response = await fetch(`${protocol}://${serverHost}/${path}`, {
     method: 'POST',
     headers: {
@@ -31,7 +36,9 @@ async function post(path, body) {
 }
 
 function resource(path) {
-  const readOnlyJwtToken = null;
+  const jwtToken = stores.getState().app.userInfo.readOnlyToken
+    ? stores.getState().app.userInfo.readOnlyToken
+    : null;
   return `${protocol}://${serverHost}/${path}`;
 }
 

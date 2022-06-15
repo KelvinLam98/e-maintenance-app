@@ -14,18 +14,29 @@ import {post} from '../common/ServerApi';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
-import {setUserInfo} from '../redux/actions';
+import {setPushToken, setUserInfo} from '../redux/actions';
 import stores from '../redux/stores';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import PushNotification from 'react-native-push-notification';
+import Toast from 'react-native-toast-message';
 
 const Login = props => {
-  const {navigation, onSetUserInfo} = props;
+  const {navigation, onSetUserInfo, pushTokenInfo, onSetPushTokenInfo} = props;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [init, setInit] = useState(false);
 
   useEffect(() => {
     setInit(true);
-  }, [init]);
+    console.log('push token: ', pushTokenInfo);
+  }, [init, pushTokenInfo]);
+
+  async function registerPushToken(token) {
+    var resp = await post('api/register-firebase-token', token);
+    console.log('resp: ', resp);
+    await post('api/register-firebase-token', token);
+    console.log('done push token');
+  }
 
   // eslint-disable-next-line no-shadow
   async function getLoginRequest(email, password) {
@@ -42,6 +53,13 @@ const Login = props => {
         };
         onSetUserInfo(login);
         const state = stores.getState().app;
+        console.log('push token: ', pushTokenInfo);
+        console.log('done login with state: ', state);
+        if (pushTokenInfo.pushToken) {
+          registerPushToken(pushTokenInfo.pushToken);
+        } else {
+          console.log('cannot add token');
+        }
         navigation.navigate('MainPage');
       } else {
         Alert.alert('Wrong email or password');
@@ -139,10 +157,19 @@ const styles = StyleSheet.create({
 Login.propTypes = {
   navigation: PropTypes.object,
   onSetUserInfo: PropTypes.func,
+  onSetPushTokenInfo: PropTypes.func,
 };
 
 const mapDispatchToProps = dispatch => ({
   onSetUserInfo: values => dispatch(setUserInfo(values)),
+  onSetPushTokenInfo: values => dispatch(setPushToken(values)),
 });
 
-export default connect(null, mapDispatchToProps)(withTranslation()(Login));
+const mapStateToProps = state => ({
+  pushTokenInfo: state.app.pushTokenInfo,
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withTranslation()(Login));
