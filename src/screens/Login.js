@@ -14,21 +14,22 @@ import {post} from '../common/ServerApi';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
-import {setUserInfo} from '../redux/actions';
+import {setPushToken, setUserInfo} from '../redux/actions';
 import stores from '../redux/stores';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import PushNotification from 'react-native-push-notification';
 import Toast from 'react-native-toast-message';
 
 const Login = props => {
-  const {navigation, onSetUserInfo} = props;
+  const {navigation, onSetUserInfo, pushTokenInfo, onSetPushTokenInfo} = props;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [init, setInit] = useState(false);
 
   useEffect(() => {
     setInit(true);
-  }, [init]);
+    console.log('push token: ', pushTokenInfo);
+  }, [init, pushTokenInfo]);
 
   async function registerPushToken(token) {
     var resp = await post('api/register-firebase-token', token);
@@ -52,60 +53,13 @@ const Login = props => {
         };
         onSetUserInfo(login);
         const state = stores.getState().app;
-        console.log('done login');
-        PushNotification.configure({
-          // (optional) Called when Token is generated (iOS and Android)
-          onRegister(token) {
-            // Call register token
-            console.log(token);
-            registerPushToken(token);
-          },
-
-          // (required) Called when a remote is received or opened, or local notification is opened
-          onNotification(notification) {
-            //onSetWorkOrderId(notification.data.article_id);
-            // process the notification
-            if (notification.foreground) {
-              Toast.show({
-                text1: 'You have received a new notification.',
-                visibilityTime: 3000,
-                position: 'bottom',
-                type: 'success',
-                autoHide: true,
-              });
-            }
-
-            if (notification.userInteraction) {
-              navigation.navigate('WorkOrderDetail');
-            }
-            // (required) Called when a remote is received or opened, or local notification is opened
-            notification.finish(PushNotificationIOS.FetchResult.NoData);
-          },
-          // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
-          onRegistrationError(err) {
-            console.error(err.message, err);
-          },
-          senderID: '638443305888',
-          // IOS ONLY (optional): default: all - Permissions to register.
-          permissions: {
-            alert: true,
-            badge: true,
-            sound: true,
-          },
-
-          // Should the initial notification be popped automatically
-          // default: true
-          popInitialNotification: true,
-
-          /**
-           * (optional) default: true
-           * - Specified if permissions (ios) and token (android and ios) will requested or not,
-           * - if not, you must call PushNotificationsHandler.requestPermissions() later
-           * - if you are not using remote notification or do not have Firebase installed, use this:
-           *     requestPermissions: Platform.OS === 'ios'
-           */
-          requestPermissions: true,
-        });
+        console.log('push token: ', pushTokenInfo);
+        console.log('done login with state: ', state);
+        if (pushTokenInfo.pushToken) {
+          registerPushToken(pushTokenInfo.pushToken);
+        } else {
+          console.log('cannot add token');
+        }
         navigation.navigate('MainPage');
       } else {
         Alert.alert('Wrong email or password');
@@ -203,10 +157,19 @@ const styles = StyleSheet.create({
 Login.propTypes = {
   navigation: PropTypes.object,
   onSetUserInfo: PropTypes.func,
+  onSetPushTokenInfo: PropTypes.func,
 };
 
 const mapDispatchToProps = dispatch => ({
   onSetUserInfo: values => dispatch(setUserInfo(values)),
+  onSetPushTokenInfo: values => dispatch(setPushToken(values)),
 });
 
-export default connect(null, mapDispatchToProps)(withTranslation()(Login));
+const mapStateToProps = state => ({
+  pushTokenInfo: state.app.pushTokenInfo,
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withTranslation()(Login));

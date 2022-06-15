@@ -11,9 +11,14 @@ const defaultWorkOrder = {
   id: 0,
 };
 
+const defaultPushToken = {
+  pushToken: null,
+};
+
 const INITIAL_STATE = {
   userInfo: defaultUserInfo,
   workOrderInfo: defaultWorkOrder,
+  pushTokenInfo: defaultPushToken,
 };
 
 const reducers = (state = INITIAL_STATE, action) => {
@@ -32,6 +37,11 @@ const reducers = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         workOrderInfo: {id: action.id},
+      };
+    case 'SET_PUSH_TOKEN':
+      return {
+        ...state,
+        pushTokenInfo: {pushToken: action.payload},
       };
     case 'SET_LOGOUT_USER_INFO':
       return {

@@ -11,3 +11,8 @@ export const setWorkOrderId = values => ({
   type: 'SET_WORK_ORDER_ID',
   ...values,
 });
+
+export const setPushToken = token => ({
+  type: 'SET_PUSH_TOKEN',
+  payload: token,
+});
