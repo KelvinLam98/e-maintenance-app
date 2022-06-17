@@ -22,6 +22,8 @@ import WorkOrderSampleDetail from './src/screens/WorkOrderSampleDetail';
 import UpdateProfile from './src/screens/UpdateProfile';
 import UpdateWorkOrder from './src/screens/UpdateWorkOrder';
 import ChangeUserPassword from './src/screens/ChangeUserPassword';
+import CreateBySample from './src/screens/CreateBySample';
+
 import {navigationRef} from './src/RootNavigation';
 
 const Stack = createStackNavigator();
@@ -49,6 +51,7 @@ const App = () => {
             />
             <Stack.Screen name="WorkOrderSample" component={WorkOrderSample} />
             <Stack.Screen name="UpdateWorkOrder" component={UpdateWorkOrder} />
+            <Stack.Screen name="CreateBySample" component={CreateBySample} />
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>

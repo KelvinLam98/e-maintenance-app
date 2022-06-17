@@ -123,7 +123,7 @@ const WorkOrderSampleDetail = props => {
           Work Order {'  '}
           <TouchableOpacity
             style={styles.editButton}
-            onPress={() => console.log('create work order')}>
+            onPress={() => navigation.navigate('CreateBySample')}>
             <Text style={styles.textStyleBtn}>Request work order</Text>
           </TouchableOpacity>
         </Text>
