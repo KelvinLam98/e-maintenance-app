@@ -46,8 +46,6 @@ const UpdateWorkOrder = props => {
   const [time, setTime] = useState(workOrderInfo.maintenance_time);
 
   async function getUpdateWorkOrderRequest(inputDate, inputTime, inputStatus) {
-    Moment(inputDate).add(1,'days').format('L');
-    console.log(inputDate);
     let id = workOrderInfo.id;
     try {
       const response = await post(`api/workOrder/detail/edit/${id}`, {
