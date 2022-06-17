@@ -11,6 +11,10 @@ const defaultWorkOrder = {
   id: 0,
 };
 
+const defaultWorkOrderSample = {
+  id: 0,
+};
+
 const defaultPushToken = {
   pushToken: null,
 };
@@ -18,6 +22,7 @@ const defaultPushToken = {
 const INITIAL_STATE = {
   userInfo: defaultUserInfo,
   workOrderInfo: defaultWorkOrder,
+  workOrderSampleInfo: defaultWorkOrderSample,
   pushTokenInfo: defaultPushToken,
 };
 
@@ -37,6 +42,11 @@ const reducers = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         workOrderInfo: {id: action.id},
+      };
+    case 'SET_WORK_ORDER_SAMPLE_ID':
+      return {
+        ...state,
+        workOrderSampleInfo: {id: action.id},
       };
     case 'SET_PUSH_TOKEN':
       return {

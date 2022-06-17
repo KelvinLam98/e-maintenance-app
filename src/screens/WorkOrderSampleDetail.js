@@ -19,18 +19,15 @@ import {
   Image,
   FlatList,
   Table,
-  ScrollView,
-  Alert,
   RefreshControl,
+  ScrollView,
 } from 'react-native';
-
 import {useFocusEffect} from '@react-navigation/native';
-
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {get, post, resource} from './common/ServerApi';
-import {DataTable, Searchbar} from 'react-native-paper';
+import {get, post, resource} from '../common/ServerApi';
+import {DataTable} from 'react-native-paper';
 import Moment from 'moment';
-import {setUserInfo, setWorkOrderId} from './redux/actions';
+import {setUserInfo, setWorkOrderSampleId} from '../redux/actions';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
@@ -39,49 +36,43 @@ const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
-const MainPage = props => {
-  const {navigation, onSetUserInfo, userInfo, workOrderInfo, onSetWorkOrder} =
-    props;
+const WorkOrderSampleDetail = props => {
+  const {
+    navigation,
+    onSetUserInfo,
+    userInfo,
+    workOrderSampleInfo,
+    onSetWorkOrderSample,
+  } = props;
   const [init, setInit] = useState(false);
-  const [workOrder, setWorkOrder] = useState([]);
-  const [searchQuery, setSearchQuery] = React.useState('');
+  const [workOrderSampleDetails, setWorkOrderSampleDetail] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
-  const onChangeSearch = query => setSearchQuery(query);
-
-  async function getWorkOrder() {
-    let id = userInfo.id;
+  async function getWorkOrderSample() {
+    let id = workOrderSampleInfo.id;
+    console.log('work order id get from redux: ', id);
     let url;
-    if (searchQuery.length !== 0) {
-      url = `api/workOrder/${id}?searchText=${searchQuery}&orderBy=maintenance_date`;
-    } else {
-      url = `api/workOrder/${id}?orderBy=maintenance_date`;
-    }
+    url = `api/workOrderSample/detail/${id}`;
     try {
       const response = await get(url);
       const json = await response;
-      setWorkOrder(json.data);
+      console.log('json: ', json);
+      setWorkOrderSampleDetail(json.data);
+      console.log('work order: ', workOrderSampleDetails);
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   }
 
-  async function getWorkOrderById(id) {
-    const woId = {id};
-    onSetWorkOrder(woId);
-    console.log('state: ', workOrderInfo);
-    navigation.navigate('WorkOrderDetail');
-  }
-
   useEffect(() => {
-    getWorkOrder();
+    getWorkOrderSample();
     setInit(true);
-  }, [searchQuery, init]);
+  }, [init]);
 
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
-      getWorkOrder();
+      getWorkOrderSample();
       return () => {
         isActive = false;
       };
@@ -93,7 +84,7 @@ const MainPage = props => {
       <View>
         <Text style={styles.head}>
           <Image
-            source={require('./logo2.png')}
+            source={require('../logo2.png')}
             // eslint-disable-next-line react-native/no-inline-styles
             style={{width: 40, height: 40}}
           />
@@ -122,50 +113,45 @@ const MainPage = props => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('WorkOrderSample')}>
-          <Text style={styles.textStyle}>Request</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
           onPress={() => navigation.navigate('Profile')}>
           <Text style={styles.textStyle}>Profile</Text>
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.container}>
-        <Text style={styles.head}>Work Order: TODO</Text>
-        <Searchbar
-          placeholder="Search"
-          onChangeText={onChangeSearch}
-          value={searchQuery}
-        />
-        <DataTable>
-          <DataTable.Header style={styles.table}>
-            <DataTable.Title>
-              <Text style={styles.title}>Date</Text>
-            </DataTable.Title>
-            <DataTable.Title>
-              <Text style={styles.title}>Code</Text>
-            </DataTable.Title>
-            <DataTable.Title>
-              <Text style={styles.title}>Status</Text>
-            </DataTable.Title>
-          </DataTable.Header>
-          {workOrder.map(item => (
-            <>
-              <DataTable.Row
-                style={styles.table}
-                onPress={() => {
-                  getWorkOrderById(item.id);
-                }}>
-                <DataTable.Cell>
-                  {Moment(item.maintenance_date).format('L')}
-                </DataTable.Cell>
-                <DataTable.Cell>{item.item_code}</DataTable.Cell>
-                <DataTable.Cell>{item.status}</DataTable.Cell>
-              </DataTable.Row>
-            </>
-          ))}
-        </DataTable>
+        <Text style={{fontSize: 25, color: 'black'}}>
+          Work Order {'  '}
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => console.log('create work order')}>
+            <Text style={styles.textStyleBtn}>Request work order</Text>
+          </TouchableOpacity>
+        </Text>
+        {workOrderSampleDetails.map(item => (
+          <>
+            <View style={styles.card}>
+              <View style={styles.listRow}>
+                <Text style={styles.textStyle}>Maintenance Code: </Text>
+                <Text style={styles.textStyle}>{item.item_code}</Text>
+              </View>
+              <View style={styles.listRow}>
+                <Text style={styles.textStyle}>Maintenance Name: </Text>
+                <Text style={styles.textStyle}>{item.item_name}</Text>
+              </View>
+              <View style={styles.listRow}>
+                <Text style={styles.textStyle}>Technician Name: </Text>
+                <Text style={styles.textStyle}>{item.technician_name}</Text>
+              </View>
+              <View style={styles.listRow}>
+                <Text style={styles.textStyle}>Technician Contact: </Text>
+                <Text style={styles.textStyle}>{item.technician_contact}</Text>
+              </View>
+              <View style={styles.listRow}>
+                <Text style={styles.textStyle}>Status: </Text>
+                <Text style={styles.textStyle}>{item.status}</Text>
+              </View>
+            </View>
+          </>
+        ))}
       </ScrollView>
     </>
   );
@@ -181,7 +167,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   button: {
-    width: '25%',
+    width: '33.33%',
     flex: 1,
     alignItems: 'center',
     padding: 1,
@@ -238,25 +224,25 @@ const styles = StyleSheet.create({
   },
 });
 
-MainPage.propTypes = {
+WorkOrderSampleDetail.propTypes = {
   navigation: PropTypes.object,
   onSetUserInfo: PropTypes.func,
-  onSetWorkOrder: PropTypes.func,
+  onSetWorkOrderSample: PropTypes.func,
   userInfo: PropTypes.object,
-  workOrderInfo: PropTypes.object,
+  workOrderSampleInfo: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
   userInfo: state.app.userInfo,
-  workOrderInfo: state.app.workOrderInfo,
+  workOrderSampleInfo: state.app.workOrderSampleInfo,
 });
 
 const mapDispatchToProps = dispatch => ({
   onSetUserInfo: values => dispatch(setUserInfo(values)),
-  onSetWorkOrder: values => dispatch(setWorkOrderId(values)),
+  onSetWorkOrderSample: values => dispatch(setWorkOrderSampleId(values)),
 });
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(withTranslation()(MainPage));
+)(withTranslation()(WorkOrderSampleDetail));

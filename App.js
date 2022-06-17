@@ -18,6 +18,8 @@ import Login from './src/screens/Login';
 import Profile from './src/screens/Profile';
 import WorkOrderHistory from './src/screens/WorkOrderHistory';
 import WorkOrderDetail from './src/screens/WorkOrderDetail';
+import WorkOrderSample from './src/screens/WorkOrderSample';
+import WorkOrderSampleDetail from './src/screens/WorkOrderSampleDetail';
 import UpdateProfile from './src/screens/UpdateProfile';
 import UpdateWorkOrder from './src/screens/UpdateWorkOrder';
 import ChangeUserPassword from './src/screens/ChangeUserPassword';
@@ -46,6 +48,11 @@ const App = () => {
               component={WorkOrderHistory}
             />
             <Stack.Screen name="WorkOrderDetail" component={WorkOrderDetail} />
+            <Stack.Screen
+              name="WorkOrderSampleDetail"
+              component={WorkOrderSampleDetail}
+            />
+            <Stack.Screen name="WorkOrderSample" component={WorkOrderSample} />
             <Stack.Screen name="UpdateWorkOrder" component={UpdateWorkOrder} />
           </Stack.Navigator>
         </NavigationContainer>
