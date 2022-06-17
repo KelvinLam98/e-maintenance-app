@@ -38,29 +38,11 @@ const UpdateProfile = props => {
   const {navigation, onSetUserInfo, userInfo, workOrderInfo, onSetWorkOrder} =
     props;
   const [init, setInit] = useState(false);
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [icNumber, setIcNumber] = useState('');
-  const [contactNumber, setContactNumber] = useState('');
-  const [address, setAddress] = useState('');
-  const [profileDetail, setProfileDetail] = useState([]);
-
-  async function getProfileDetail() {
-    let id = userInfo.id;
-    console.log('profile id get from redux: ', id);
-    let url;
-    url = `api/profile/${id}`;
-    try {
-      const response = await get(url);
-      const json = await response;
-      console.log('json: ', json);
-      setProfileDetail(json.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  console.log('profileDetail', profileDetail)
+  const [email, setEmail] = useState(userInfo.email);
+  const [name, setName] = useState(userInfo.name);
+  const [icNumber, setIcNumber] = useState(userInfo.ic_number);
+  const [contactNumber, setContactNumber] = useState(userInfo.contact_number);
+  const [address, setAddress] = useState(userInfo.address);
 
   async function getUpdateProfileRequest(
     inputName,
@@ -87,7 +69,6 @@ const UpdateProfile = props => {
 
   useEffect(() => {
     setInit(true);
-    getProfileDetail();
   }, [init]);
 
   return (
@@ -130,9 +111,7 @@ const UpdateProfile = props => {
       </View>
       <ScrollView style={styles.container}>
         <Text style={styles.head}>Edit</Text>
-        {profileDetail.map(detail => (
-          <>
-          <View style={styles.card}>
+        <View style={styles.card}>
           <View style={styles.listRow}>
             <Text style={styles.textStyle}>Name: </Text>
             <TextInput
@@ -141,7 +120,6 @@ const UpdateProfile = props => {
               autoCorrect={false}
               placeholder="Name"
               value={name}
-              defaultValue={userInfo.id}
               onChangeText={newValue => setName(newValue)}
             />
           </View>
@@ -153,7 +131,6 @@ const UpdateProfile = props => {
               autoCorrect={false}
               placeholder="Email"
               value={email}
-              defaultValue={detail.email}
               onChangeText={newValue => setEmail(newValue)}
             />
           </View>
@@ -165,7 +142,6 @@ const UpdateProfile = props => {
               autoCorrect={false}
               placeholder="IC"
               value={icNumber}
-              defaultValue={detail.ic_number}
               onChangeText={newValue => setIcNumber(newValue)}
             />
           </View>
@@ -177,7 +153,6 @@ const UpdateProfile = props => {
               autoCorrect={false}
               placeholder="Contact Number"
               value={contactNumber}
-              defaultValue={detail.contact_number}
               onChangeText={newValue => setContactNumber(newValue)}
             />
           </View>
@@ -189,7 +164,6 @@ const UpdateProfile = props => {
               autoCorrect={false}
               placeholder="Address"
               value={address}
-              defaultValue={detail.address}
               onChangeText={newValue => setAddress(newValue)}
             />
           </View>
@@ -206,9 +180,7 @@ const UpdateProfile = props => {
               )
             }
           />
-          </View>
-          </>
-        ))} 
+        </View>
       </ScrollView>
     </>
   );

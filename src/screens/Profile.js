@@ -54,7 +54,6 @@ const Profile = props => {
       const json = await response;
       console.log('json: ', json);
       setProfileDetail(json.data);
-      console.log('profile detail: ', profileDetail);
     } catch (error) {
       console.log(error);
     }

@@ -59,6 +59,7 @@ const WorkOrderDetail = props => {
   useEffect(() => {
     getWorkOrder();
     setInit(true);
+    console.log('detail: ',workOrderInfo)
   }, [init]);
 
   useFocusEffect(
@@ -112,15 +113,20 @@ const WorkOrderDetail = props => {
       <ScrollView style={styles.container}>
         <Text style={{fontSize: 25, color: 'black'}}>
           Work Order {'  '}
-          {workOrderInfo.status === ('Created' || 'In Progress' || 'Accepted') ? (
+          {workOrderInfo.status === ('Created') ? (
             <TouchableOpacity
               style={styles.editButton}
               onPress={() => navigation.navigate('UpdateWorkOrder')}>
               <Text style={styles.textStyleBtn}>Edit</Text>
             </TouchableOpacity>
-          ) : (
-            <Text style={styles.textStyleBtn} />
-          )}
+          ) : workOrderInfo.status === ('In Progress') ? (
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={() => navigation.navigate('UpdateWorkOrder')}>
+              <Text style={styles.textStyleBtn}>Edit</Text>
+            </TouchableOpacity>
+          ) : <Text style={styles.textStyleBtn} />
+          }
         </Text>
         {workOrderDetails.map(item => (
           <>

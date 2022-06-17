@@ -69,10 +69,9 @@ const MainPage = props => {
     }
   }
 
-  async function getWorkOrderById(id, status) {
-    const woId = {id, status};
+  async function getWorkOrderById(id, status, maintenance_date, maintenance_time) {
+    const woId = {id, status, maintenance_date, maintenance_time};
     onSetWorkOrder(woId);
-    console.log('state: ', workOrderInfo);
     navigation.navigate('WorkOrderDetail');
   }
 
@@ -153,7 +152,7 @@ const MainPage = props => {
               <DataTable.Row
                 style={styles.table}
                 onPress={() => {
-                  getWorkOrderById(item.id, item.status);
+                  getWorkOrderById(item.id, item.status, item.maintenance_date, item.maintenance_time);
                 }}>
                 <DataTable.Cell>
                   {Moment(item.maintenance_date).format('L')}
