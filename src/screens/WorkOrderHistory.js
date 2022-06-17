@@ -53,9 +53,9 @@ const WorkOrderHistory = props => {
     console.log('id get from redux: ', id);
     let url;
     if (searchQuery.length !== 0) {
-      url = `api/workOrderHistory/${id}?searchText=${searchQuery}`;
+      url = `api/workOrderHistory/${id}?searchText=${searchQuery}&orderBy=maintenance_date`;
     } else {
-      url = `api/workOrderHistory/${id}`;
+      url = `api/workOrderHistory/${id}?orderBy=maintenance_date`;
     }
     try {
       const response = await get(url);

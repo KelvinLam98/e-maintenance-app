@@ -53,9 +53,9 @@ const MainPage = props => {
     let id = userInfo.id;
     let url;
     if (searchQuery.length !== 0) {
-      url = `api/workOrder/${id}?searchText=${searchQuery}`;
+      url = `api/workOrder/${id}?searchText=${searchQuery}&orderBy=maintenance_date`;
     } else {
-      url = `api/workOrder/${id}`;
+      url = `api/workOrder/${id}?orderBy=maintenance_date`;
     }
     try {
       const response = await get(url);
