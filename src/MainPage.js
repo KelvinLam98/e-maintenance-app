@@ -53,9 +53,9 @@ const MainPage = props => {
     let id = userInfo.id;
     let url;
     if (searchQuery.length !== 0) {
-      url = `api/workOrder/${id}?searchText=${searchQuery}`;
+      url = `api/workOrder/${id}?searchText=${searchQuery}&orderBy=maintenance_date`;
     } else {
-      url = `api/workOrder/${id}`;
+      url = `api/workOrder/${id}?orderBy=maintenance_date`;
     }
     try {
       const response = await get(url);
@@ -122,6 +122,11 @@ const MainPage = props => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
+          onPress={() => navigation.navigate('WorkOrderSample')}>
+          <Text style={styles.textStyle}>Request</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
           onPress={() => navigation.navigate('Profile')}>
           <Text style={styles.textStyle}>Profile</Text>
         </TouchableOpacity>
@@ -176,7 +181,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   button: {
-    width: '33.33%',
+    width: '25%',
     flex: 1,
     alignItems: 'center',
     padding: 1,

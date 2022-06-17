@@ -29,7 +29,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {get, post, resource} from '../common/ServerApi';
 import {DataTable, Searchbar} from 'react-native-paper';
 import Moment from 'moment';
-import {setUserInfo, setWorkOrderId} from '../redux/actions';
+import {setUserInfo, setWorkOrderSampleId} from '../redux/actions';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
@@ -38,51 +38,55 @@ const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
-const WorkOrderHistory = props => {
-  const {navigation, onSetUserInfo, userInfo, workOrderInfo, onSetWorkOrder} =
-    props;
+const WorkOrderSample = props => {
+  const {
+    navigation,
+    onSetUserInfo,
+    userInfo,
+    workOrderSampleInfo,
+    onSetWorkOrderSample,
+  } = props;
   const [init, setInit] = useState(false);
-  const [workOrder, setWorkOrder] = useState([]);
+  const [workOrderSample, setWorkOrderSample] = useState([]);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [refreshing, setRefreshing] = useState(false);
 
   const onChangeSearch = query => setSearchQuery(query);
 
-  async function getWorkOrder() {
+  async function getWorkOrderSample() {
     let id = userInfo.id;
     console.log('id get from redux: ', id);
     let url;
     if (searchQuery.length !== 0) {
-      url = `api/workOrderHistory/${id}?searchText=${searchQuery}&orderBy=maintenance_date`;
+      url = `api/workOrderSample/${id}?searchText=${searchQuery}&orderBy=item_name`;
     } else {
-      url = `api/workOrderHistory/${id}?orderBy=maintenance_date`;
+      url = `api/workOrderSample/${id}?orderBy=item_name`;
     }
     try {
       const response = await get(url);
       const json = await response;
-      setWorkOrder(json.data);
-      console.log(workOrder);
+      setWorkOrderSample(json.data);
+      console.log(workOrderSample);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
-  async function getWorkOrderById(id) {
-    const woId = {id};
-    onSetWorkOrder(woId);
-    console.log('state: ', workOrderInfo);
-    navigation.navigate('WorkOrderDetail');
+  async function getWorkOrderSampleById(id) {
+    const wosId = {id};
+    onSetWorkOrderSample(wosId);
+    navigation.navigate('WorkOrderSampleDetail');
   }
 
   useEffect(() => {
-    getWorkOrder();
+    getWorkOrderSample();
     setInit(true);
   }, [searchQuery, init]);
 
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
-      getWorkOrder();
+      getWorkOrderSample();
       return () => {
         isActive = false;
       };
@@ -128,7 +132,7 @@ const WorkOrderHistory = props => {
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.container}>
-        <Text style={styles.head}>Work Order: History</Text>
+        <Text style={styles.head}>Work Order Sample</Text>
         <Searchbar
           placeholder="Search"
           onChangeText={onChangeSearch}
@@ -146,18 +150,14 @@ const WorkOrderHistory = props => {
               <Text style={styles.title}>Status</Text>
             </DataTable.Title>
           </DataTable.Header>
-          {workOrder.map(item => (
+          {workOrderSample.map(item => (
             <>
               <DataTable.Row
                 style={styles.table}
                 onPress={() => {
-                  getWorkOrderById(item.id);
+                  getWorkOrderSampleById(item.id);
                 }}>
-                <DataTable.Cell>
-                  {Moment(item.maintenance_date).format('L')}
-                </DataTable.Cell>
-                <DataTable.Cell>{item.item_code}</DataTable.Cell>
-                <DataTable.Cell>{item.status}</DataTable.Cell>
+                <DataTable.Cell>{item.item_name}</DataTable.Cell>
               </DataTable.Row>
             </>
           ))}
@@ -234,25 +234,25 @@ const styles = StyleSheet.create({
   },
 });
 
-WorkOrderHistory.propTypes = {
+WorkOrderSample.propTypes = {
   navigation: PropTypes.object,
   onSetUserInfo: PropTypes.func,
-  onSetWorkOrder: PropTypes.func,
+  onSetWorkOrderSample: PropTypes.func,
   userInfo: PropTypes.object,
-  workOrderInfo: PropTypes.object,
+  workOrderSampleInfo: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
   userInfo: state.app.userInfo,
-  workOrderInfo: state.app.workOrderInfo,
+  workOrderSampleInfo: state.app.workOrderSampleInfo,
 });
 
 const mapDispatchToProps = dispatch => ({
   onSetUserInfo: values => dispatch(setUserInfo(values)),
-  onSetWorkOrder: values => dispatch(setWorkOrderId(values)),
+  onSetWorkOrderSample: values => dispatch(setWorkOrderSampleId(values)),
 });
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(withTranslation()(WorkOrderHistory));
+)(withTranslation()(WorkOrderSample));
