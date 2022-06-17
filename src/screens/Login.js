@@ -28,7 +28,6 @@ const Login = props => {
 
   useEffect(() => {
     setInit(true);
-    console.log('push token: ', pushTokenInfo);
   }, [init, pushTokenInfo]);
 
   async function registerPushToken(token) {

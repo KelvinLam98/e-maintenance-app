@@ -43,6 +43,24 @@ const UpdateProfile = props => {
   const [icNumber, setIcNumber] = useState('');
   const [contactNumber, setContactNumber] = useState('');
   const [address, setAddress] = useState('');
+  const [profileDetail, setProfileDetail] = useState([]);
+
+  async function getProfileDetail() {
+    let id = userInfo.id;
+    console.log('profile id get from redux: ', id);
+    let url;
+    url = `api/profile/${id}`;
+    try {
+      const response = await get(url);
+      const json = await response;
+      console.log('json: ', json);
+      setProfileDetail(json.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  console.log('profileDetail', profileDetail)
 
   async function getUpdateProfileRequest(
     inputName,
@@ -69,6 +87,7 @@ const UpdateProfile = props => {
 
   useEffect(() => {
     setInit(true);
+    getProfileDetail();
   }, [init]);
 
   return (
@@ -100,8 +119,8 @@ const UpdateProfile = props => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('WorkOrderHistory')}>
-          <Text style={styles.textStyle}>History</Text>
+          onPress={() => navigation.navigate('WorkOrderSample')}>
+          <Text style={styles.textStyle}>Request</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
@@ -111,7 +130,9 @@ const UpdateProfile = props => {
       </View>
       <ScrollView style={styles.container}>
         <Text style={styles.head}>Edit</Text>
-        <View style={styles.card}>
+        {profileDetail.map(detail => (
+          <>
+          <View style={styles.card}>
           <View style={styles.listRow}>
             <Text style={styles.textStyle}>Name: </Text>
             <TextInput
@@ -120,6 +141,7 @@ const UpdateProfile = props => {
               autoCorrect={false}
               placeholder="Name"
               value={name}
+              defaultValue={userInfo.id}
               onChangeText={newValue => setName(newValue)}
             />
           </View>
@@ -131,6 +153,7 @@ const UpdateProfile = props => {
               autoCorrect={false}
               placeholder="Email"
               value={email}
+              defaultValue={detail.email}
               onChangeText={newValue => setEmail(newValue)}
             />
           </View>
@@ -142,6 +165,7 @@ const UpdateProfile = props => {
               autoCorrect={false}
               placeholder="IC"
               value={icNumber}
+              defaultValue={detail.ic_number}
               onChangeText={newValue => setIcNumber(newValue)}
             />
           </View>
@@ -153,6 +177,7 @@ const UpdateProfile = props => {
               autoCorrect={false}
               placeholder="Contact Number"
               value={contactNumber}
+              defaultValue={detail.contact_number}
               onChangeText={newValue => setContactNumber(newValue)}
             />
           </View>
@@ -164,6 +189,7 @@ const UpdateProfile = props => {
               autoCorrect={false}
               placeholder="Address"
               value={address}
+              defaultValue={detail.address}
               onChangeText={newValue => setAddress(newValue)}
             />
           </View>
@@ -180,7 +206,9 @@ const UpdateProfile = props => {
               )
             }
           />
-        </View>
+          </View>
+          </>
+        ))} 
       </ScrollView>
     </>
   );
@@ -201,15 +229,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 1,
     elevation: 20,
-    backgroundColor: 'azure',
+    backgroundColor: 'lightblue',
     paddingVertical: 10,
     paddingHorizontal: 12,
   },
   editButton: {
-    borderColor: 'lightgrey',
-    borderWidth: 1,
     padding: 10,
-    backgroundColor: 'lightgrey',
+    backgroundColor: 'royalblue',
   },
   container: {
     flex: 1,
@@ -238,14 +264,19 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   listRow: {
-    padding: 10,
+    paddingBottom: 10,
+    paddingTop: 10,
     borderBottomColor: 'lightgrey',
     borderBottomWidth: 1,
-    margin: 10,
   },
   textStyle: {
     fontSize: 15,
     color: 'black',
+    textAlign: 'left',
+  },
+  textStyleBtn: {
+    fontSize: 15,
+    color: 'white',
     textAlign: 'left',
   },
 });

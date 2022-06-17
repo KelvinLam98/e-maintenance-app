@@ -9,6 +9,7 @@ const defaultUserInfo = {
 
 const defaultWorkOrder = {
   id: 0,
+  status: '',
 };
 
 const defaultWorkOrderSample = {
@@ -41,7 +42,7 @@ const reducers = (state = INITIAL_STATE, action) => {
     case 'SET_WORK_ORDER_ID':
       return {
         ...state,
-        workOrderInfo: {id: action.id},
+        workOrderInfo: {id: action.id, status: action.status},
       };
     case 'SET_WORK_ORDER_SAMPLE_ID':
       return {

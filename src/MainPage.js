@@ -45,6 +45,7 @@ const MainPage = props => {
   const [init, setInit] = useState(false);
   const [workOrder, setWorkOrder] = useState([]);
   const [searchQuery, setSearchQuery] = React.useState('');
+  const [searchQuery1, setSearchQuery1] = React.useState('');
   const [refreshing, setRefreshing] = useState(false);
 
   const onChangeSearch = query => setSearchQuery(query);
@@ -52,8 +53,10 @@ const MainPage = props => {
   async function getWorkOrder() {
     let id = userInfo.id;
     let url;
-    if (searchQuery.length !== 0) {
-      url = `api/workOrder/${id}?searchText=${searchQuery}&orderBy=maintenance_date`;
+    if (searchQuery.length !== 0 || searchQuery1 !== 0) {
+      url = `api/workOrder/${id}?searchText=${
+        (searchQuery, searchQuery1)
+      }&orderBy=maintenance_date`;
     } else {
       url = `api/workOrder/${id}?orderBy=maintenance_date`;
     }
@@ -66,8 +69,8 @@ const MainPage = props => {
     }
   }
 
-  async function getWorkOrderById(id) {
-    const woId = {id};
+  async function getWorkOrderById(id, status) {
+    const woId = {id, status};
     onSetWorkOrder(woId);
     console.log('state: ', workOrderInfo);
     navigation.navigate('WorkOrderDetail');
@@ -76,7 +79,7 @@ const MainPage = props => {
   useEffect(() => {
     getWorkOrder();
     setInit(true);
-  }, [searchQuery, init]);
+  }, [searchQuery, searchQuery1, init]);
 
   useFocusEffect(
     useCallback(() => {
@@ -117,11 +120,6 @@ const MainPage = props => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('WorkOrderHistory')}>
-          <Text style={styles.textStyle}>History</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
           onPress={() => navigation.navigate('WorkOrderSample')}>
           <Text style={styles.textStyle}>Request</Text>
         </TouchableOpacity>
@@ -132,7 +130,7 @@ const MainPage = props => {
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.container}>
-        <Text style={styles.head}>Work Order: TODO</Text>
+        <Text style={styles.head}>Work Orders</Text>
         <Searchbar
           placeholder="Search"
           onChangeText={onChangeSearch}
@@ -141,13 +139,13 @@ const MainPage = props => {
         <DataTable>
           <DataTable.Header style={styles.table}>
             <DataTable.Title>
-              <Text style={styles.title}>Date</Text>
+              <Text style={styles.textStyle}>Date</Text>
             </DataTable.Title>
             <DataTable.Title>
-              <Text style={styles.title}>Code</Text>
+              <Text style={styles.textStyle}>Code</Text>
             </DataTable.Title>
             <DataTable.Title>
-              <Text style={styles.title}>Status</Text>
+              <Text style={styles.textStyle}>Status</Text>
             </DataTable.Title>
           </DataTable.Header>
           {workOrder.map(item => (
@@ -155,7 +153,7 @@ const MainPage = props => {
               <DataTable.Row
                 style={styles.table}
                 onPress={() => {
-                  getWorkOrderById(item.id);
+                  getWorkOrderById(item.id, item.status);
                 }}>
                 <DataTable.Cell>
                   {Moment(item.maintenance_date).format('L')}
@@ -167,6 +165,40 @@ const MainPage = props => {
           ))}
         </DataTable>
       </ScrollView>
+      <View style={styles.nav}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => setSearchQuery1('')}>
+          <Text style={styles.textStyle}>All</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => setSearchQuery1('Created')}>
+          <Text style={styles.textStyle}>Created</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => setSearchQuery1('In Progress')}>
+          <Text style={styles.textStyle}>Booked</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.nav}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => setSearchQuery1('Pending')}>
+          <Text style={styles.textStyle}>Pending</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => setSearchQuery1('Completed')}>
+          <Text style={styles.textStyle}>Completed</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => setSearchQuery1('Rejected')}>
+          <Text style={styles.textStyle}>Rejected</Text>
+        </TouchableOpacity>
+      </View>
     </>
   );
 };
@@ -181,12 +213,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   button: {
-    width: '25%',
+    width: '33.33%',
     flex: 1,
     alignItems: 'center',
     padding: 1,
     elevation: 20,
-    backgroundColor: 'azure',
+    backgroundColor: 'lightblue',
     paddingVertical: 10,
     paddingHorizontal: 12,
   },

@@ -103,8 +103,8 @@ const Profile = props => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('WorkOrderHistory')}>
-          <Text style={styles.textStyle}>History</Text>
+          onPress={() => navigation.navigate('WorkOrderSample')}>
+          <Text style={styles.textStyle}>Request</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 1,
     elevation: 20,
-    backgroundColor: 'azure',
+    backgroundColor: 'lightblue',
     paddingVertical: 10,
     paddingHorizontal: 12,
   },

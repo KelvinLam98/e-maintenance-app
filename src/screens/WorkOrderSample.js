@@ -122,8 +122,8 @@ const WorkOrderSample = props => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('WorkOrderHistory')}>
-          <Text style={styles.textStyle}>History</Text>
+          onPress={() => navigation.navigate('WorkOrderSample')}>
+          <Text style={styles.textStyle}>Request</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
@@ -141,13 +141,7 @@ const WorkOrderSample = props => {
         <DataTable>
           <DataTable.Header style={styles.table}>
             <DataTable.Title>
-              <Text style={styles.title}>Date</Text>
-            </DataTable.Title>
-            <DataTable.Title>
-              <Text style={styles.title}>Code</Text>
-            </DataTable.Title>
-            <DataTable.Title>
-              <Text style={styles.title}>Status</Text>
+              <Text style={styles.textStyle}>Sample</Text>
             </DataTable.Title>
           </DataTable.Header>
           {workOrderSample.map(item => (
@@ -182,7 +176,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 1,
     elevation: 20,
-    backgroundColor: 'azure',
+    backgroundColor: 'lightblue',
     paddingVertical: 10,
     paddingHorizontal: 12,
   },
