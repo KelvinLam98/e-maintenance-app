@@ -47,7 +47,7 @@ const UpdateWorkOrder = props => {
 
   async function getUpdateWorkOrderRequest(inputDate, inputTime, inputStatus) {
     let id = workOrderInfo.id;
-    const formattedDate = inputDate.getFullYear() + "-" + (inputDate.getMonth() + 1) + "-" + (inputDate.getDate() + 1)
+    const formattedDate = inputDate.getFullYear() + "-" + (inputDate.getMonth() + 1) + "-" + inputDate.getDate()
     console.log(formattedDate)
     try {
       const response = await post(`api/workOrder/detail/edit/${id}`, {
@@ -153,7 +153,7 @@ const UpdateWorkOrder = props => {
               <Picker
                 selectedValue={status}
                 onValueChange={(itemValue, itemIndex) => setStatus(itemValue)}>
-                <Picker.Item label="Created" value="Created" />
+                <Picker.Item label="Todo" value="Todo" />
                 <Picker.Item label="In Progress" value="In Progress" />
                 <Picker.Item label="Completed" value="Completed" />
               </Picker>

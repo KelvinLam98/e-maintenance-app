@@ -44,9 +44,9 @@ const MainPage = props => {
     props;
   const [init, setInit] = useState(false);
   const [workOrder, setWorkOrder] = useState([]);
+  const [newDate, setNewDate] = useState('');
   const [searchQuery, setSearchQuery] = React.useState('');
   const [searchQuery1, setSearchQuery1] = React.useState('');
-  const [newDate, setNewDate] = useState('');
 
   const onChangeSearch = query => setSearchQuery(query);
 

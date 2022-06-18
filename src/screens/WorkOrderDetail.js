@@ -113,7 +113,7 @@ const WorkOrderDetail = props => {
       <ScrollView style={styles.container}>
         <Text style={{fontSize: 25, color: 'black'}}>
           Work Order {'  '}
-          {workOrderInfo.status === ('Created') ? (
+          {workOrderInfo.status === ('Todo') ? (
             <TouchableOpacity
               style={styles.editButton}
               onPress={() => navigation.navigate('UpdateWorkOrder')}>
