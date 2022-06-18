@@ -111,23 +111,7 @@ const WorkOrderDetail = props => {
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.container}>
-        <Text style={{fontSize: 25, color: 'black'}}>
-          Work Order {'  '}
-          {workOrderInfo.status === ('Todo') ? (
-            <TouchableOpacity
-              style={styles.editButton}
-              onPress={() => navigation.navigate('UpdateWorkOrder')}>
-              <Text style={styles.textStyleBtn}>Edit</Text>
-            </TouchableOpacity>
-          ) : workOrderInfo.status === ('In Progress') ? (
-            <TouchableOpacity
-              style={styles.editButton}
-              onPress={() => navigation.navigate('UpdateWorkOrder')}>
-              <Text style={styles.textStyleBtn}>Edit</Text>
-            </TouchableOpacity>
-          ) : <Text style={styles.textStyleBtn} />
-          }
-        </Text>
+        <Text style={{fontSize: 25, color: 'black'}}>Work Order</Text>
         {workOrderDetails.map(item => (
           <>
             <View style={styles.card}>
@@ -165,6 +149,23 @@ const WorkOrderDetail = props => {
           </>
         ))}
       </ScrollView>
+      <View style={styles.nav}>
+      {workOrderInfo.status === ('Todo') ? (
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={() => navigation.navigate('UpdateWorkOrder')}>
+              <Text style={styles.textStyleBtn}>Edit</Text>
+            </TouchableOpacity>
+          ) : workOrderInfo.status === ('In Progress') ? (
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={() => navigation.navigate('UpdateWorkOrder')}>
+              <Text style={styles.textStyleBtn}>Edit</Text>
+            </TouchableOpacity>
+          ) : <Text style={styles.textStyleBtn} />
+          }
+          </View>
+        
     </>
   );
 };
@@ -189,6 +190,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   editButton: {
+    width: '100%',
     padding: 10,
     backgroundColor: 'royalblue',
   },
@@ -232,7 +234,7 @@ const styles = StyleSheet.create({
   textStyleBtn: {
     fontSize: 15,
     color: 'white',
-    textAlign: 'left',
+    textAlign: 'center',
   },
 });
 

@@ -158,16 +158,16 @@ const UpdateWorkOrder = props => {
                 <Picker.Item label="Completed" value="Completed" />
               </Picker>
             </View>
-
-            <Button
+          </View>
+        </ScrollView>
+        <Button
               title="Submit"
               color="royalblue"
+              width='100%'
               onPress={newValue =>
                 getUpdateWorkOrderRequest(date, time, status)
               }
             />
-          </View>
-        </ScrollView>
       </SafeAreaView>
     </>
   );

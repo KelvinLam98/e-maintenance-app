@@ -148,15 +148,16 @@
                  <Picker.Item label="18:00" value="18:00" />
                </Picker>
              </View> 
-             <Button
+           </View>
+         </ScrollView>
+         <Button
                title="Submit"
                color="royalblue"
+               width='100%'
                onPress={newValue =>
                  getUpdateWorkOrderRequest(date, time)
                }
              />
-           </View>
-         </ScrollView>
        </SafeAreaView>
      </>
    );

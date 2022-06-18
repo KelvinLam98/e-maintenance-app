@@ -143,15 +143,16 @@ const ChangeUserPassword = props => {
               onChangeText={newValue => setConfirmPassword(newValue)}
             />
           </View>
+        </View>
+      </ScrollView>
           <Button
             title="Submit"
             color="royalblue"
+            width='100%'
             onPress={newValue =>
               getChangePasswordRequest(password, newPassword, confirmPassword)
             }
           />
-        </View>
-      </ScrollView>
     </>
   );
 };

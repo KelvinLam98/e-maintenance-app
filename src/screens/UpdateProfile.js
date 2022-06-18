@@ -167,9 +167,12 @@ const UpdateProfile = props => {
               onChangeText={newValue => setAddress(newValue)}
             />
           </View>
-          <Button
+        </View>
+      </ScrollView>
+      <Button
             title="Submit"
             color="royalblue"
+            width='100%'
             onPress={newValue =>
               getUpdateProfileRequest(
                 name,
@@ -180,8 +183,6 @@ const UpdateProfile = props => {
               )
             }
           />
-        </View>
-      </ScrollView>
     </>
   );
 };
