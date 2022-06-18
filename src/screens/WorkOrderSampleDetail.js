@@ -108,8 +108,8 @@ const WorkOrderSampleDetail = props => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('WorkOrderHistory')}>
-          <Text style={styles.textStyle}>History</Text>
+          onPress={() => navigation.navigate('WorkOrderSample')}>
+          <Text style={styles.textStyle}>Request</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
@@ -117,12 +117,13 @@ const WorkOrderSampleDetail = props => {
           <Text style={styles.textStyle}>Profile</Text>
         </TouchableOpacity>
       </View>
+
       <ScrollView style={styles.container}>
         <Text style={{fontSize: 25, color: 'black'}}>
           Work Order {'  '}
           <TouchableOpacity
             style={styles.editButton}
-            onPress={() => console.log('create work order')}>
+            onPress={() => navigation.navigate('CreateBySample')}>
             <Text style={styles.textStyleBtn}>Request work order</Text>
           </TouchableOpacity>
         </Text>
@@ -172,7 +173,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 1,
     elevation: 20,
-    backgroundColor: 'azure',
+    backgroundColor: 'lightblue',
     paddingVertical: 10,
     paddingHorizontal: 12,
   },

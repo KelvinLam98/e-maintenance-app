@@ -41,19 +41,16 @@ const WorkOrderDetail = props => {
     props;
   const [init, setInit] = useState(false);
   const [workOrderDetails, setWorkOrderDetail] = useState([]);
-  const [refreshing, setRefreshing] = useState(false);
 
   async function getWorkOrder() {
-    let id = workOrderInfo.id;
-    console.log('work order id get from redux: ', id);
-    let url;
-    url = `api/workOrder/detail/${id}`;
     try {
+      console.log('redux work order: ', workOrderInfo);
+      let id = workOrderInfo.id;
+      let url;
+      url = `api/workOrder/detail/${id}`;
       const response = await get(url);
       const json = await response;
-      console.log('json: ', json);
       setWorkOrderDetail(json.data);
-      console.log('work order: ', workOrderDetails);
     } catch (error) {
       console.log(error);
     }
@@ -62,6 +59,7 @@ const WorkOrderDetail = props => {
   useEffect(() => {
     getWorkOrder();
     setInit(true);
+    console.log('detail: ',workOrderInfo)
   }, [init]);
 
   useFocusEffect(
@@ -103,8 +101,8 @@ const WorkOrderDetail = props => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('WorkOrderHistory')}>
-          <Text style={styles.textStyle}>History</Text>
+          onPress={() => navigation.navigate('WorkOrderSample')}>
+          <Text style={styles.textStyle}>Request</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
@@ -115,11 +113,20 @@ const WorkOrderDetail = props => {
       <ScrollView style={styles.container}>
         <Text style={{fontSize: 25, color: 'black'}}>
           Work Order {'  '}
-          <TouchableOpacity
-            style={styles.editButton}
-            onPress={() => navigation.navigate('UpdateWorkOrder')}>
-            <Text style={styles.textStyleBtn}>Edit</Text>
-          </TouchableOpacity>
+          {workOrderInfo.status === ('Created') ? (
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={() => navigation.navigate('UpdateWorkOrder')}>
+              <Text style={styles.textStyleBtn}>Edit</Text>
+            </TouchableOpacity>
+          ) : workOrderInfo.status === ('In Progress') ? (
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={() => navigation.navigate('UpdateWorkOrder')}>
+              <Text style={styles.textStyleBtn}>Edit</Text>
+            </TouchableOpacity>
+          ) : <Text style={styles.textStyleBtn} />
+          }
         </Text>
         {workOrderDetails.map(item => (
           <>
@@ -177,7 +184,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 1,
     elevation: 20,
-    backgroundColor: 'azure',
+    backgroundColor: 'lightblue',
     paddingVertical: 10,
     paddingHorizontal: 12,
   },
@@ -228,6 +235,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
 });
+
 
 WorkOrderDetail.propTypes = {
   navigation: PropTypes.object,

@@ -40,16 +40,18 @@ const UpdateWorkOrder = props => {
   const {navigation, onSetUserInfo, userInfo, workOrderInfo, onSetWorkOrder} =
     props;
   const [init, setInit] = useState(false);
-  const [status, setStatus] = useState('Created');
+  const [status, setStatus] = useState(workOrderInfo.status);
   const [datePicker, setDatePicker] = useState(false);
   const [date, setDate] = useState(new Date());
-  const [time, setTime] = useState('09:00');
+  const [time, setTime] = useState(workOrderInfo.maintenance_time);
 
   async function getUpdateWorkOrderRequest(inputDate, inputTime, inputStatus) {
     let id = workOrderInfo.id;
+    const formattedDate = inputDate.getFullYear() + "-" + (inputDate.getMonth() + 1) + "-" + (inputDate.getDate() + 1)
+    console.log(formattedDate)
     try {
       const response = await post(`api/workOrder/detail/edit/${id}`, {
-        maintenance_date: inputDate,
+        maintenance_date: formattedDate,
         maintenance_time: inputTime,
         status: inputStatus,
       });
@@ -93,8 +95,8 @@ const UpdateWorkOrder = props => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('WorkOrderHistory')}>
-          <Text style={styles.textStyle}>History</Text>
+          onPress={() => navigation.navigate('WorkOrderSample')}>
+          <Text style={styles.textStyle}>Request</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
@@ -107,16 +109,18 @@ const UpdateWorkOrder = props => {
           <Text style={styles.head}>Edit</Text>
           <View style={styles.card}>
             <View style={styles.listRow}>
-              <Text style={styles.textStyle}>Date: {date.toDateString()}</Text>
-              <Button
-                title="Choose Date"
-                color="green"
+              <Text style={styles.textStyle}>Date: {Moment(date).format('L')} {'   '}<Ionicons
+                name="calendar-sharp"
+                size={30}
+                color="black"
                 onPress={() => setDatePicker(true)}
-              />
+              /></Text>
+              
               <DatePicker
                 modal
                 open={datePicker}
                 date={date}
+                format="DD/MM/YYYY"
                 mode="date"
                 onConfirm={date => {
                   setDatePicker(false);
@@ -184,7 +188,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 1,
     elevation: 20,
-    backgroundColor: 'azure',
+    backgroundColor: 'lightblue',
     paddingVertical: 10,
     paddingHorizontal: 12,
   },

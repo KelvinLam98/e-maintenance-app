@@ -5,10 +5,18 @@ const defaultUserInfo = {
   name: '',
   token: '',
   readOnlyToken: '',
+  name: '',
+  ic_number: '',
+  contact_number: '',
+  address: '',
+  email: ''
 };
 
 const defaultWorkOrder = {
   id: 0,
+  status: '',
+  maintenance_date: null, 
+  maintenance_time: ''
 };
 
 const defaultWorkOrderSample = {
@@ -36,12 +44,16 @@ const reducers = (state = INITIAL_STATE, action) => {
           name: action.name,
           token: action.token,
           readOnlyToken: action.readOnlyToken,
+          ic_number: action.ic_number,
+          contact_number: action.contact_number,
+          address: action.address,
+          email: action.email
         },
       };
     case 'SET_WORK_ORDER_ID':
       return {
         ...state,
-        workOrderInfo: {id: action.id},
+        workOrderInfo: {id: action.id, status: action.status, maintenance_date: action.maintenance_date, maintenance_time: action.maintenance_time},
       };
     case 'SET_WORK_ORDER_SAMPLE_ID':
       return {

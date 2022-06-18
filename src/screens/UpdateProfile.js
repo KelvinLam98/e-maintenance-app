@@ -38,11 +38,11 @@ const UpdateProfile = props => {
   const {navigation, onSetUserInfo, userInfo, workOrderInfo, onSetWorkOrder} =
     props;
   const [init, setInit] = useState(false);
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [icNumber, setIcNumber] = useState('');
-  const [contactNumber, setContactNumber] = useState('');
-  const [address, setAddress] = useState('');
+  const [email, setEmail] = useState(userInfo.email);
+  const [name, setName] = useState(userInfo.name);
+  const [icNumber, setIcNumber] = useState(userInfo.ic_number);
+  const [contactNumber, setContactNumber] = useState(userInfo.contact_number);
+  const [address, setAddress] = useState(userInfo.address);
 
   async function getUpdateProfileRequest(
     inputName,
@@ -100,8 +100,8 @@ const UpdateProfile = props => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('WorkOrderHistory')}>
-          <Text style={styles.textStyle}>History</Text>
+          onPress={() => navigation.navigate('WorkOrderSample')}>
+          <Text style={styles.textStyle}>Request</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
@@ -201,15 +201,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 1,
     elevation: 20,
-    backgroundColor: 'azure',
+    backgroundColor: 'lightblue',
     paddingVertical: 10,
     paddingHorizontal: 12,
   },
   editButton: {
-    borderColor: 'lightgrey',
-    borderWidth: 1,
     padding: 10,
-    backgroundColor: 'lightgrey',
+    backgroundColor: 'royalblue',
   },
   container: {
     flex: 1,
@@ -238,14 +236,19 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   listRow: {
-    padding: 10,
+    paddingBottom: 10,
+    paddingTop: 10,
     borderBottomColor: 'lightgrey',
     borderBottomWidth: 1,
-    margin: 10,
   },
   textStyle: {
     fontSize: 15,
     color: 'black',
+    textAlign: 'left',
+  },
+  textStyleBtn: {
+    fontSize: 15,
+    color: 'white',
     textAlign: 'left',
   },
 });

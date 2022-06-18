@@ -16,13 +16,14 @@ import stores from './src/redux/stores';
 import MainPage from './src/MainPage';
 import Login from './src/screens/Login';
 import Profile from './src/screens/Profile';
-import WorkOrderHistory from './src/screens/WorkOrderHistory';
 import WorkOrderDetail from './src/screens/WorkOrderDetail';
 import WorkOrderSample from './src/screens/WorkOrderSample';
 import WorkOrderSampleDetail from './src/screens/WorkOrderSampleDetail';
 import UpdateProfile from './src/screens/UpdateProfile';
 import UpdateWorkOrder from './src/screens/UpdateWorkOrder';
 import ChangeUserPassword from './src/screens/ChangeUserPassword';
+import CreateBySample from './src/screens/CreateBySample';
+
 import {navigationRef} from './src/RootNavigation';
 
 const Stack = createStackNavigator();
@@ -43,10 +44,6 @@ const App = () => {
               name="ChangeUserPassword"
               component={ChangeUserPassword}
             />
-            <Stack.Screen
-              name="WorkOrderHistory"
-              component={WorkOrderHistory}
-            />
             <Stack.Screen name="WorkOrderDetail" component={WorkOrderDetail} />
             <Stack.Screen
               name="WorkOrderSampleDetail"
@@ -54,6 +51,7 @@ const App = () => {
             />
             <Stack.Screen name="WorkOrderSample" component={WorkOrderSample} />
             <Stack.Screen name="UpdateWorkOrder" component={UpdateWorkOrder} />
+            <Stack.Screen name="CreateBySample" component={CreateBySample} />
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>

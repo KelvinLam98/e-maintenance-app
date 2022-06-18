@@ -171,15 +171,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 1,
     elevation: 20,
-    backgroundColor: 'azure',
+    backgroundColor: 'lightblue',
     paddingVertical: 10,
     paddingHorizontal: 12,
   },
   editButton: {
-    borderColor: 'lightgrey',
-    borderWidth: 1,
     padding: 10,
-    backgroundColor: 'lightgrey',
+    backgroundColor: 'royalblue',
   },
   container: {
     flex: 1,
@@ -208,14 +206,19 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   listRow: {
-    padding: 10,
+    paddingBottom: 10,
+    paddingTop: 10,
     borderBottomColor: 'lightgrey',
     borderBottomWidth: 1,
-    margin: 10,
   },
   textStyle: {
     fontSize: 15,
     color: 'black',
+    textAlign: 'left',
+  },
+  textStyleBtn: {
+    fontSize: 15,
+    color: 'white',
     textAlign: 'left',
   },
 });
