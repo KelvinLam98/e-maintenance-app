@@ -55,12 +55,11 @@ const WorkOrderSample = props => {
 
   async function getWorkOrderSample() {
     let id = userInfo.id;
-    console.log('id get from redux: ', id);
     let url;
     if (searchQuery.length !== 0) {
-      url = `api/workOrderSample/${id}?searchText=${searchQuery}&orderBy=item_name`;
+      url = `api/workOrderSample?searchText=${searchQuery}&orderBy=item_name`;
     } else {
-      url = `api/workOrderSample/${id}?orderBy=item_name`;
+      url = `api/workOrderSample?orderBy=item_name`;
     }
     try {
       const response = await get(url);

@@ -46,7 +46,7 @@ const MainPage = props => {
   const [workOrder, setWorkOrder] = useState([]);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [searchQuery1, setSearchQuery1] = React.useState('');
-  const [refreshing, setRefreshing] = useState(false);
+  const [newDate, setNewDate] = useState('');
 
   const onChangeSearch = query => setSearchQuery(query);
 
@@ -63,6 +63,10 @@ const MainPage = props => {
     try {
       const response = await get(url);
       const json = await response;
+      const inputDate = new Date();
+      const newDate1 = Moment(inputDate).format("YYYY-MM-DD")
+      console.log(newDate1);
+      setNewDate(newDate1);
       setWorkOrder(json.data);
     } catch (error) {
       console.error(error);
@@ -167,18 +171,18 @@ const MainPage = props => {
       <View style={styles.nav}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => setSearchQuery1('')}>
+          onPress={() => setSearchQuery1(newDate)}>
           <Text style={styles.textStyle}>All</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => setSearchQuery1('Created')}>
-          <Text style={styles.textStyle}>Created</Text>
+          onPress={() => setSearchQuery1('Todo')}>
+          <Text style={styles.textStyle}>Todo</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           onPress={() => setSearchQuery1('In Progress')}>
-          <Text style={styles.textStyle}>Booked</Text>
+          <Text style={styles.textStyle}>In Progress</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.nav}>
