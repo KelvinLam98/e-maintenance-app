@@ -54,7 +54,7 @@ const MainPage = props => {
     Moment(new Date()).format('YYYY-MM-DD'),
   );
   const [searchQuery, setSearchQuery] = React.useState('');
-  const [searchQuery1, setSearchQuery1] = React.useState('');
+  const [searchQuery1, setSearchQuery1] = React.useState('Todo');
 
   const onChangeSearch = query => setSearchQuery(query);
 
@@ -226,7 +226,7 @@ const MainPage = props => {
         <TouchableOpacity
           style={styles.button1}
           onPress={() => setSearchQuery1('')}>
-          <Text style={styles.textStyle}>Reset</Text>
+          <Text style={styles.textStyle}>All</Text>
         </TouchableOpacity>
       </View>
     </>
