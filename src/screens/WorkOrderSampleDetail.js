@@ -119,14 +119,7 @@ const WorkOrderSampleDetail = props => {
       </View>
 
       <ScrollView style={styles.container}>
-        <Text style={{fontSize: 25, color: 'black'}}>
-          Work Order {'  '}
-          <TouchableOpacity
-            style={styles.editButton}
-            onPress={() => navigation.navigate('CreateBySample')}>
-            <Text style={styles.textStyleBtn}>Request work order</Text>
-          </TouchableOpacity>
-        </Text>
+        <Text style={{fontSize: 25, color: 'black'}}>Work Order</Text>
         {workOrderSampleDetails.map(item => (
           <>
             <View style={styles.card}>
@@ -154,6 +147,13 @@ const WorkOrderSampleDetail = props => {
           </>
         ))}
       </ScrollView>
+      <View style={styles.nav}>
+      <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => navigation.navigate('CreateBySample')}>
+            <Text style={styles.textStyleBtn}>Request work order</Text>
+          </TouchableOpacity>
+          </View>
     </>
   );
 };
@@ -178,6 +178,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   editButton: {
+    width: "100%",
     padding: 10,
     backgroundColor: 'royalblue',
   },
@@ -221,7 +222,7 @@ const styles = StyleSheet.create({
   textStyleBtn: {
     fontSize: 15,
     color: 'white',
-    textAlign: 'left',
+    textAlign: 'center',
   },
 });
 

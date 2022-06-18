@@ -44,7 +44,7 @@ const MainPage = props => {
     props;
   const [init, setInit] = useState(false);
   const [workOrder, setWorkOrder] = useState([]);
-  const [newDate, setNewDate] = useState('');
+  const [newDate, setNewDate] = useState(Moment(new Date()).format("YYYY-MM-DD"));
   const [searchQuery, setSearchQuery] = React.useState('');
   const [searchQuery1, setSearchQuery1] = React.useState('');
 
@@ -65,7 +65,6 @@ const MainPage = props => {
       const json = await response;
       const inputDate = new Date();
       const newDate1 = Moment(inputDate).format("YYYY-MM-DD")
-      console.log(newDate1);
       setNewDate(newDate1);
       setWorkOrder(json.data);
     } catch (error) {
@@ -82,7 +81,7 @@ const MainPage = props => {
   useEffect(() => {
     getWorkOrder();
     setInit(true);
-  }, [searchQuery, searchQuery1, init]);
+  }, [searchQuery, searchQuery1, newDate, init]);
 
   useFocusEffect(
     useCallback(() => {
@@ -172,7 +171,7 @@ const MainPage = props => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => setSearchQuery1(newDate)}>
-          <Text style={styles.textStyle}>All</Text>
+          <Text style={styles.textStyle}>Today</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
@@ -186,20 +185,25 @@ const MainPage = props => {
         </TouchableOpacity>
       </View>
       <View style={styles.nav}>
+      <TouchableOpacity
+          style={styles.button1}
+          onPress={() => setSearchQuery1('Completed')}>
+          <Text style={styles.textStyle}>History</Text>
+        </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
+          style={styles.button1}
           onPress={() => setSearchQuery1('Pending')}>
           <Text style={styles.textStyle}>Pending</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
-          onPress={() => setSearchQuery1('Completed')}>
-          <Text style={styles.textStyle}>Completed</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
+          style={styles.button1}
           onPress={() => setSearchQuery1('Rejected')}>
           <Text style={styles.textStyle}>Rejected</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button1}
+          onPress={() => setSearchQuery1('')}>
+          <Text style={styles.textStyle}>Reset</Text>
         </TouchableOpacity>
       </View>
     </>
@@ -217,6 +221,16 @@ const styles = StyleSheet.create({
   },
   button: {
     width: '33.33%',
+    flex: 1,
+    alignItems: 'center',
+    padding: 1,
+    elevation: 20,
+    backgroundColor: 'lightblue',
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+  },
+  button1: {
+    width: '25%',
     flex: 1,
     alignItems: 'center',
     padding: 1,
