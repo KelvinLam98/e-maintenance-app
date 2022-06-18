@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,6 +9,7 @@ import {
   TextInput,
   Alert,
 } from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 
 import {post} from '../common/ServerApi';
 import PropTypes from 'prop-types';
@@ -19,6 +20,10 @@ import stores from '../redux/stores';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import PushNotification from 'react-native-push-notification';
 import Toast from 'react-native-toast-message';
+
+const wait = timeout => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
 
 const Login = props => {
   const {navigation, onSetUserInfo, pushTokenInfo, onSetPushTokenInfo} = props;
@@ -67,6 +72,17 @@ const Login = props => {
       console.error(error);
     }
   }
+
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
+      setEmail('');
+      setPassword('');
+      return () => {
+        isActive = false;
+      };
+    }, []),
+  );
 
   return (
     <>

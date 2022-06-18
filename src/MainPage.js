@@ -30,7 +30,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {get, post, resource} from './common/ServerApi';
 import {DataTable, Searchbar} from 'react-native-paper';
 import Moment from 'moment';
-import {setUserInfo, setWorkOrderId} from './redux/actions';
+import {setUserInfo, setWorkOrderId, setLogoutUserInfo} from './redux/actions';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {withTranslation} from 'react-i18next';
@@ -40,11 +40,19 @@ const wait = timeout => {
 };
 
 const MainPage = props => {
-  const {navigation, onSetUserInfo, userInfo, workOrderInfo, onSetWorkOrder} =
-    props;
+  const {
+    navigation,
+    onSetUserInfo,
+    userInfo,
+    workOrderInfo,
+    onSetWorkOrder,
+    onSetLogoutInfo,
+  } = props;
   const [init, setInit] = useState(false);
   const [workOrder, setWorkOrder] = useState([]);
-  const [newDate, setNewDate] = useState(Moment(new Date()).format("YYYY-MM-DD"));
+  const [newDate, setNewDate] = useState(
+    Moment(new Date()).format('YYYY-MM-DD'),
+  );
   const [searchQuery, setSearchQuery] = React.useState('');
   const [searchQuery1, setSearchQuery1] = React.useState('');
 
@@ -64,7 +72,7 @@ const MainPage = props => {
       const response = await get(url);
       const json = await response;
       const inputDate = new Date();
-      const newDate1 = Moment(inputDate).format("YYYY-MM-DD")
+      const newDate1 = Moment(inputDate).format('YYYY-MM-DD');
       setNewDate(newDate1);
       setWorkOrder(json.data);
     } catch (error) {
@@ -72,7 +80,17 @@ const MainPage = props => {
     }
   }
 
-  async function getWorkOrderById(id, status, maintenance_date, maintenance_time) {
+  function logout() {
+    onSetLogoutInfo();
+    navigation.navigate('Login');
+  }
+
+  async function getWorkOrderById(
+    id,
+    status,
+    maintenance_date,
+    maintenance_time,
+  ) {
     const woId = {id, status, maintenance_date, maintenance_time};
     onSetWorkOrder(woId);
     navigation.navigate('WorkOrderDetail');
@@ -109,7 +127,7 @@ const MainPage = props => {
             name="person"
             size={30}
             color="black"
-            onPress={() => navigation.navigate('Login')}
+            onPress={() => logout()}
           />
         </Text>
       </View>
@@ -155,7 +173,12 @@ const MainPage = props => {
               <DataTable.Row
                 style={styles.table}
                 onPress={() => {
-                  getWorkOrderById(item.id, item.status, item.maintenance_date, item.maintenance_time);
+                  getWorkOrderById(
+                    item.id,
+                    item.status,
+                    item.maintenance_date,
+                    item.maintenance_time,
+                  );
                 }}>
                 <DataTable.Cell>
                   {Moment(item.maintenance_date).format('L')}
@@ -185,7 +208,7 @@ const MainPage = props => {
         </TouchableOpacity>
       </View>
       <View style={styles.nav}>
-      <TouchableOpacity
+        <TouchableOpacity
           style={styles.button1}
           onPress={() => setSearchQuery1('Completed')}>
           <Text style={styles.textStyle}>History</Text>
@@ -290,6 +313,7 @@ const styles = StyleSheet.create({
 MainPage.propTypes = {
   navigation: PropTypes.object,
   onSetUserInfo: PropTypes.func,
+  onSetLogoutInfo: PropTypes.func,
   onSetWorkOrder: PropTypes.func,
   userInfo: PropTypes.object,
   workOrderInfo: PropTypes.object,
@@ -303,6 +327,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onSetUserInfo: values => dispatch(setUserInfo(values)),
   onSetWorkOrder: values => dispatch(setWorkOrderId(values)),
+  onSetLogoutInfo: () => dispatch(setLogoutUserInfo()),
 });
 
 export default connect(
