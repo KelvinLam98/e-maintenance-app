@@ -112,20 +112,7 @@ const Profile = props => {
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.container}>
-        <Text style={styles.head}>
-          Profile {'  '}
-          <TouchableOpacity
-            style={styles.editButton}
-            onPress={() => navigation.navigate('UpdateProfile')}>
-            <Text style={styles.textStyleBtn}>Edit</Text>
-          </TouchableOpacity>
-          {'  '}
-          <TouchableOpacity
-            style={styles.editButton}
-            onPress={() => navigation.navigate('ChangeUserPassword')}>
-            <Text style={styles.textStyleBtn}>Change Password</Text>
-          </TouchableOpacity>
-        </Text>
+        <Text style={styles.head}>Profile</Text>
         {profileDetail.map(item => (
           <>
             <View style={styles.card}>
@@ -153,6 +140,19 @@ const Profile = props => {
           </>
         ))}
       </ScrollView>
+      <View style={styles.nav}>
+      <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => navigation.navigate('UpdateProfile')}>
+            <Text style={styles.textStyleBtn}>Edit</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => navigation.navigate('ChangeUserPassword')}>
+            <Text style={styles.textStyleBtn}>Change Password</Text>
+          </TouchableOpacity>
+          </View>
+
     </>
   );
 };
@@ -179,6 +179,7 @@ const styles = StyleSheet.create({
   editButton: {
     padding: 10,
     backgroundColor: 'royalblue',
+    width: '50%',
   },
   container: {
     flex: 1,
@@ -220,7 +221,7 @@ const styles = StyleSheet.create({
   textStyleBtn: {
     fontSize: 15,
     color: 'white',
-    textAlign: 'left',
+    textAlign: 'center',
   },
 });
 

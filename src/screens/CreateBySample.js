@@ -45,11 +45,15 @@
    const [date, setDate] = useState(new Date());
    const [time, setTime] = useState('09:00');
  
-   async function getUpdateWorkOrderRequest(inputDate, inputTime, inputStatus) {
+   async function getUpdateWorkOrderRequest(inputDate, inputTime) {
      let id = workOrderSampleInfo.id;
+     let user_id = userInfo.id;
+     const formattedDate = inputDate.getFullYear() + "-" + (inputDate.getMonth() + 1) + "-" + inputDate.getDate()
+     console.log(formattedDate)
      try {
        const response = await post(`api/workOrderSample/detail/create/${id}`, {
-         maintenance_date: inputDate,
+         user_id: user_id, 
+         maintenance_date: formattedDate,
          maintenance_time: inputTime,
        });
        Alert.alert(response);
@@ -144,15 +148,16 @@
                  <Picker.Item label="18:00" value="18:00" />
                </Picker>
              </View> 
-             <Button
+           </View>
+         </ScrollView>
+         <Button
                title="Submit"
                color="royalblue"
+               width='100%'
                onPress={newValue =>
                  getUpdateWorkOrderRequest(date, time)
                }
              />
-           </View>
-         </ScrollView>
        </SafeAreaView>
      </>
    );
