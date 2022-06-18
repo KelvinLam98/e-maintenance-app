@@ -47,9 +47,11 @@ const UpdateWorkOrder = props => {
 
   async function getUpdateWorkOrderRequest(inputDate, inputTime, inputStatus) {
     let id = workOrderInfo.id;
+    const formattedDate = inputDate.getFullYear() + "-" + (inputDate.getMonth() + 1) + "-" + (inputDate.getDate() + 1)
+    console.log(formattedDate)
     try {
       const response = await post(`api/workOrder/detail/edit/${id}`, {
-        maintenance_date: inputDate,
+        maintenance_date: formattedDate,
         maintenance_time: inputTime,
         status: inputStatus,
       });
@@ -118,6 +120,7 @@ const UpdateWorkOrder = props => {
                 modal
                 open={datePicker}
                 date={date}
+                format="DD/MM/YYYY"
                 mode="date"
                 onConfirm={date => {
                   setDatePicker(false);

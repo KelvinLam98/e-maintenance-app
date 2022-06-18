@@ -43,7 +43,7 @@
    const [status, setStatus] = useState('');
    const [datePicker, setDatePicker] = useState(false);
    const [date, setDate] = useState(new Date());
-   const [time, setTime] = useState('');
+   const [time, setTime] = useState('09:00');
  
    async function getUpdateWorkOrderRequest(inputDate, inputTime, inputStatus) {
      let id = workOrderSampleInfo.id;
