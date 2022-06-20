@@ -92,7 +92,7 @@ const WorkOrderSampleDetail = props => {
         </Text>
         <Text style={styles.buttonIcon}>
           <Ionicons
-            name="person"
+            name="exit-outline"
             size={30}
             color="black"
             onPress={() => navigation.navigate('Login')}
@@ -148,12 +148,12 @@ const WorkOrderSampleDetail = props => {
         ))}
       </ScrollView>
       <View style={styles.nav}>
-      <TouchableOpacity
-            style={styles.editButton}
-            onPress={() => navigation.navigate('CreateBySample')}>
-            <Text style={styles.textStyleBtn}>Request work order</Text>
-          </TouchableOpacity>
-          </View>
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => navigation.navigate('CreateBySample')}>
+          <Text style={styles.textStyleBtn}>Request work order</Text>
+        </TouchableOpacity>
+      </View>
     </>
   );
 };
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   editButton: {
-    width: "100%",
+    width: '100%',
     padding: 10,
     backgroundColor: 'royalblue',
   },

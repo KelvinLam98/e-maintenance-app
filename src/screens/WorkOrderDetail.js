@@ -59,7 +59,7 @@ const WorkOrderDetail = props => {
   useEffect(() => {
     getWorkOrder();
     setInit(true);
-    console.log('detail: ',workOrderInfo)
+    console.log('detail: ', workOrderInfo);
   }, [init]);
 
   useFocusEffect(
@@ -85,7 +85,7 @@ const WorkOrderDetail = props => {
         </Text>
         <Text style={styles.buttonIcon}>
           <Ionicons
-            name="person"
+            name="exit-outline"
             size={30}
             color="black"
             onPress={() => navigation.navigate('Login')}
@@ -150,22 +150,22 @@ const WorkOrderDetail = props => {
         ))}
       </ScrollView>
       <View style={styles.nav}>
-      {workOrderInfo.status === ('Todo') ? (
-            <TouchableOpacity
-              style={styles.editButton}
-              onPress={() => navigation.navigate('UpdateWorkOrder')}>
-              <Text style={styles.textStyleBtn}>Edit</Text>
-            </TouchableOpacity>
-          ) : workOrderInfo.status === ('In Progress') ? (
-            <TouchableOpacity
-              style={styles.editButton}
-              onPress={() => navigation.navigate('UpdateWorkOrder')}>
-              <Text style={styles.textStyleBtn}>Edit</Text>
-            </TouchableOpacity>
-          ) : <Text style={styles.textStyleBtn} />
-          }
-          </View>
-        
+        {workOrderInfo.status === 'Todo' ? (
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => navigation.navigate('UpdateWorkOrder')}>
+            <Text style={styles.textStyleBtn}>Edit</Text>
+          </TouchableOpacity>
+        ) : workOrderInfo.status === 'In Progress' ? (
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => navigation.navigate('UpdateWorkOrder')}>
+            <Text style={styles.textStyleBtn}>Edit</Text>
+          </TouchableOpacity>
+        ) : (
+          <Text style={styles.textStyleBtn} />
+        )}
+      </View>
     </>
   );
 };
@@ -237,7 +237,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
 
 WorkOrderDetail.propTypes = {
   navigation: PropTypes.object,

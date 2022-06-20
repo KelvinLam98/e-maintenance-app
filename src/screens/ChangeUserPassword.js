@@ -82,7 +82,7 @@ const ChangeUserPassword = props => {
         </Text>
         <Text style={styles.buttonIcon}>
           <Ionicons
-            name="person"
+            name="exit-outline"
             size={30}
             color="black"
             onPress={() => navigation.navigate('Login')}
@@ -116,6 +116,7 @@ const ChangeUserPassword = props => {
               style={styles.textInput}
               autoCapitalize="none"
               autoCorrect={false}
+              secureTextEntry={true}
               placeholder="Old Password"
               value={password}
               onChangeText={newValue => setPassword(newValue)}
@@ -127,6 +128,7 @@ const ChangeUserPassword = props => {
               style={styles.textInput}
               autoCapitalize="none"
               autoCorrect={false}
+              secureTextEntry={true}
               placeholder="Email"
               value={newPassword}
               onChangeText={newValue => setNewPassword(newValue)}
@@ -138,6 +140,7 @@ const ChangeUserPassword = props => {
               style={styles.textInput}
               autoCapitalize="none"
               autoCorrect={false}
+              secureTextEntry={true}
               placeholder="Confirm Password"
               value={confirmPassword}
               onChangeText={newValue => setConfirmPassword(newValue)}
@@ -145,14 +148,14 @@ const ChangeUserPassword = props => {
           </View>
         </View>
       </ScrollView>
-          <Button
-            title="Submit"
-            color="royalblue"
-            width='100%'
-            onPress={newValue =>
-              getChangePasswordRequest(password, newPassword, confirmPassword)
-            }
-          />
+      <Button
+        title="Submit"
+        color="royalblue"
+        width="100%"
+        onPress={newValue =>
+          getChangePasswordRequest(password, newPassword, confirmPassword)
+        }
+      />
     </>
   );
 };
