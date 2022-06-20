@@ -84,7 +84,7 @@ const UpdateProfile = props => {
         </Text>
         <Text style={styles.buttonIcon}>
           <Ionicons
-            name="person"
+            name="exit-outline"
             size={30}
             color="black"
             onPress={() => navigation.navigate('Login')}
@@ -170,19 +170,13 @@ const UpdateProfile = props => {
         </View>
       </ScrollView>
       <Button
-            title="Submit"
-            color="royalblue"
-            width='100%'
-            onPress={newValue =>
-              getUpdateProfileRequest(
-                name,
-                email,
-                icNumber,
-                contactNumber,
-                address,
-              )
-            }
-          />
+        title="Submit"
+        color="royalblue"
+        width="100%"
+        onPress={newValue =>
+          getUpdateProfileRequest(name, email, icNumber, contactNumber, address)
+        }
+      />
     </>
   );
 };

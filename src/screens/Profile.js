@@ -86,7 +86,7 @@ const Profile = props => {
         </Text>
         <Text style={styles.buttonIcon}>
           <Ionicons
-            name="person"
+            name="exit-outline"
             size={30}
             color="black"
             onPress={() => navigation.navigate('Login')}
@@ -141,18 +141,17 @@ const Profile = props => {
         ))}
       </ScrollView>
       <View style={styles.nav}>
-      <TouchableOpacity
-            style={styles.editButton}
-            onPress={() => navigation.navigate('UpdateProfile')}>
-            <Text style={styles.textStyleBtn}>Edit</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.editButton}
-            onPress={() => navigation.navigate('ChangeUserPassword')}>
-            <Text style={styles.textStyleBtn}>Change Password</Text>
-          </TouchableOpacity>
-          </View>
-
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => navigation.navigate('UpdateProfile')}>
+          <Text style={styles.textStyleBtn}>Edit</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => navigation.navigate('ChangeUserPassword')}>
+          <Text style={styles.textStyleBtn}>Change Password</Text>
+        </TouchableOpacity>
+      </View>
     </>
   );
 };

@@ -47,8 +47,13 @@ const UpdateWorkOrder = props => {
 
   async function getUpdateWorkOrderRequest(inputDate, inputTime, inputStatus) {
     let id = workOrderInfo.id;
-    const formattedDate = inputDate.getFullYear() + "-" + (inputDate.getMonth() + 1) + "-" + inputDate.getDate()
-    console.log(formattedDate)
+    const formattedDate =
+      inputDate.getFullYear() +
+      '-' +
+      (inputDate.getMonth() + 1) +
+      '-' +
+      inputDate.getDate();
+    console.log(formattedDate);
     try {
       const response = await post(`api/workOrder/detail/edit/${id}`, {
         maintenance_date: formattedDate,
@@ -79,7 +84,7 @@ const UpdateWorkOrder = props => {
         </Text>
         <Text style={styles.buttonIcon}>
           <Ionicons
-            name="person"
+            name="exit-outline"
             size={30}
             color="black"
             onPress={() => navigation.navigate('Login')}
@@ -109,13 +114,16 @@ const UpdateWorkOrder = props => {
           <Text style={styles.head}>Edit</Text>
           <View style={styles.card}>
             <View style={styles.listRow}>
-              <Text style={styles.textStyle}>Date: {Moment(date).format('L')} {'   '}<Ionicons
-                name="calendar-sharp"
-                size={30}
-                color="black"
-                onPress={() => setDatePicker(true)}
-              /></Text>
-              
+              <Text style={styles.textStyle}>
+                Date: {Moment(date).format('L')} {'   '}
+                <Ionicons
+                  name="calendar-sharp"
+                  size={30}
+                  color="black"
+                  onPress={() => setDatePicker(true)}
+                />
+              </Text>
+
               <DatePicker
                 modal
                 open={datePicker}
@@ -161,13 +169,11 @@ const UpdateWorkOrder = props => {
           </View>
         </ScrollView>
         <Button
-              title="Submit"
-              color="royalblue"
-              width='100%'
-              onPress={newValue =>
-                getUpdateWorkOrderRequest(date, time, status)
-              }
-            />
+          title="Submit"
+          color="royalblue"
+          width="100%"
+          onPress={newValue => getUpdateWorkOrderRequest(date, time, status)}
+        />
       </SafeAreaView>
     </>
   );

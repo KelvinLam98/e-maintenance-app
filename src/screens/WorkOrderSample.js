@@ -105,7 +105,7 @@ const WorkOrderSample = props => {
         </Text>
         <Text style={styles.buttonIcon}>
           <Ionicons
-            name="person"
+            name="exit-outline"
             size={30}
             color="black"
             onPress={() => navigation.navigate('Login')}
